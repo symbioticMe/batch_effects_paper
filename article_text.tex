@@ -13,16 +13,17 @@
 
 \title{Batch effects in large-scale proteomics studies: diagnostics and correction}
 
-\runningtitle{Running title may not exceed 60 characters and spaces}
+\runningtitle{Batch effects in large-scale proteomics studies: diagnostics and correction}
 
 % Use \authormark if required to clarify multiple institutions
-\author{Jelena Čuklina\authormark{1, 2, 3}, Chloe Lee\authormark{1}, Evan G. Williams\authormark{1}, Tatjana Sajic\authormark{1}, Ben C. Collins\authormark{1}, Maria Rodriguez-Martinez\authormark{3}, Patrick Pedrioli, Ruedi Aebersold\authormark{1, 4}}
+\author{Jelena Čuklina\authormark{1, 2, 3}, Chloe Lee\authormark{1}, Evan G. Williams\authormark{1}, Tatjana Sajic\authormark{1}, Ben C. Collins\authormark{1}, Maria Rodriguez-Martinez\authormark{3}, Varun Sharma\authormark{1}, Patrick Pedrioli\authormark{1, 4}, Ruedi Aebersold\authormark{1, 5}}
 
-\affil{Department of \authormark{1}Biology and \authormark{2}Pharmacology, University of Examples, Fictiontown, CA 10101}
+\affil{\authormark{1}Institute of Molecular Systems Biology, ETH Zurich, Zurich, CH-8093, Switzerland,\authormark{2} PhD Program in Systems Biology, University of Zurich and ETH Zurich,
+Zurich, CH-8057  Switzerland, \authormark{3} IBM Zurich Research Laboratory, Rüschlikon, CH-8803, Switzerland, \authormark{4}ETH Zürich, PHRT-MS, Zürich, Switzerland, \authormark{5}Faculty of Science, University of Zurich, Zurich, Switzerland}
 
-\corr{Corresponding author’s name, telephone and fax numbers, and current \email{e-mail} address.}
+\corr{Ruedi Aebersold, +41 44 633 31 70 \email{aebersold@imsb.biol.ethz.ch} }
 
-\keywords{keyword 1, keyword 2, keyword 3, keyword 4, keyword 5, etc..}
+\keywords{Batch effects, Quantitative proteomics, Normalization, Preprocessing,}
 
 \begin{document}
 
@@ -30,16 +31,18 @@
 
 \begin{article}
 \begin{abstract}
-The abstract should succinctly and clearly describe the major findings reported in the manuscript. It must not exceed 250 words.
+\textit{The abstract should succinctly and clearly describe the major findings reported in the manuscript. It must not exceed 250 words.}
 
-Recent technical advances in mass spectrometry based proteomics have significantly increased robustness, sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Whereas, increased sample numbers facilitate statistical association of proteome states with phenotypes, they generally come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. Here, we introduce proBatch a novel R package and show how it can be used to diagnose and correct these effects.
-Bottom-up proteomics is a multistep process, consisting of biosample collection, protein digestion and mass-spectra acquisition. Using four large proteomics datasets, we show how to diagnose the contribution of each of these steps to the overall experimental batch effect. We find that proteome level effects can be efficiently visualized/diagnosed with tools such as boxplots, hierarchical clustering, and Principal Variance Component Analysis. Furthermore, we also identify a subset of technical artifacts that can only be diagnosed at the single peptide level. 
-We then move on to show how to guide batch effect correction using information gathered at the diagnostic stage. Here, we find that batch effects originating from discrete factors, such as instrument or protein digestion batches, can be efficiently corrected using standard approaches borrowed from the genomic field. Additionally, we report the presence of mass-spectrometry specific non-linear trends associated with sample running order. To address these, we propose a new correction procedure based on LOESS trend fitting. 
-Finally, we demonstrate, how the same diagnostic tools can be used to assess the performance of the applied corrections and how these approaches improve signal in the samples under investigation. 
+Recent technical advances in mass spectrometry based proteomics have significantly increased robustness, sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Whereas, increased sample numbers facilitate statistical association of proteome states with phenotypes, they generally come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. Bottom-up proteomics is a multistep process, consisting of biosample collection, protein digestion and mass-spectra acquisition. Each of the steps can result in batch effects, that need to be accounted for before biological signal inference.
+Here, we  describe a step-by-step workflow that allows to identify batch effects, select appropriate methods for their correction and control the quality of the correction. We present a corresponding tool, a novel R package "proBatch" that implements each of the steps. 
+We also address several mass-spectrometry specific issues, associated with batch effects. First, we demontstrate MS signal deterioration, associated with sample running order. To address it, we propose a new correction procedure based on LOESS trend fitting. Then, we highlight the issue of batch-specific missingness patterns and discuss the problem of missing value imputation in the context of batch effects.
+We demonstrate the workflow and the package using three large  proteomics datasets, spanning 140-375 mass-spectromentry runs, representing different biological backgrounds and sources of batch effects. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods.
+
+ 
 
 \end{abstract}
 
-The introduction begins after the abstract and is not preceded by the word ``Introduction.''
+\textit{The introduction begins after the abstract and is not preceded by the word ``Introduction.''}
 
 The introduction presents the purpose of the study and its relationship to earlier work in the field. It should not be an extensive review of the literature. It is usually less than one formatted page
 
