@@ -6,7 +6,7 @@
 \usepackage{siunitx}
 
 % Update article type if known
-\papertype{Original Article}
+\papertype{Original Article/ Review?}
 % Include section in journal if known, otherwise delete
 \paperfield{Methods & Resources}
 \usepackage{graphicx}
@@ -19,36 +19,49 @@
 
 \title{Batch effects in large-scale proteomics studies: diagnostics and correction}
 
-\runningtitle{Batch effects in large-scale proteomics studies: diagnostics and correction}
+\abbrevs{PCA, Principle Component Analysis; PVCA, Principal Variance Component Analysis; CV, Coefficient of Variance; MS, mass spectrometry.}
 
-% Use \authormark if required to clarify multiple institutions
-\author{Jelena Čuklina\authormark{1, 2, 3}, Chloe Lee\authormark{1}, Evan G. Williams\authormark{1}, Tatjana Sajic\authormark{1}, Ben C. Collins\authormark{1}, Maria Rodriguez-Martinez\authormark{3}, Varun Sharma\authormark{1}, Patrick Pedrioli\authormark{1, 4}, Ruedi Aebersold\authormark{1, 5}}
+\author[1, 2, 3]{Jelena Čuklina}
+\author[1]{Chloe Lee}
+\author[1]{Evan G. Williams}
+\author[1]{Tatjana Sajic}
+\author[1\authfn{2}]{Ben C. Collins}
+\author[3]{Maria Rodriguez-Martinez}
+\author[2]{Varun Sharma}
+\author[1, 4]{Patrick Pedrioli}
+\author[1, 5]{Ruedi Aebersold}
 
-\affil{\authormark{1}Institute of Molecular Systems Biology, ETH Zurich, Zurich, CH-8093, Switzerland,\authormark{2} PhD Program in Systems Biology, University of Zurich and ETH Zurich,
-Zurich, CH-8057  Switzerland, \authormark{3} IBM Zurich Research Laboratory, Rüschlikon, CH-8803, Switzerland, \authormark{4}ETH Zürich, PHRT-MS, Zürich, Switzerland, \authormark{5}Faculty of Science, University of Zurich, Zurich, Switzerland}
+\affil[1]{Institute of Molecular Systems Biology, ETH Zurich, Zurich, CH-8093, Switzerland}
+\affil[2]{PhD Program in Systems Biology, University of Zurich and ETH Zurich, Zurich, CH-8057  Switzerland}
+\affil[3]{IBM Zurich Research Laboratory, Rüschlikon, CH-8803, Switzerland}
+\affil[4]{ETH Zürich, PHRT-MS, Zürich, Switzerland}
+\affil[5]{Faculty of Science, University of Zurich, Zurich, Switzerland}
 
-\corr{Ruedi Aebersold, +41 44 633 31 70 \email{aebersold@imsb.biol.ethz.ch} }
+\corremail{aebersold@imsb.biol.ethz.ch}
 
-\keywords{Batch effects, Quantitative proteomics, Normalization, Preprocessing,}
+
+\presentadd[\authfn{2}]{Queen's University Belfast, Belfast, UK}
+
+\fundinginfo{J.Č. was supported by funding from the European Union Horizon 2020 research and innovation program under grant agreement No 668858 and the Swiss State Secretariat for Education, Research and Innovation (SERI) under contract number 15.0324-2. P.P. was supported by SNF grant no. SNF IZLRZ3\_163911.}
+
+\runningauthor{Čuklina et al.}
 
 \begin{document}
 
 \maketitle
 
-\begin{article}
 \begin{abstract}
-\textit{The abstract should succinctly and clearly describe the major findings reported in the manuscript. It must not exceed 250 words.}
+ Advances in mass spectrometry based proteomics have significantly increased sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Increased sample numbers, however, come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. 
 
-Recent technical advances in mass spectrometry based proteomics have significantly increased robustness, sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Whereas, increased sample numbers facilitate statistical association of proteome states with phenotypes, they generally come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. Bottom-up proteomics is a multistep process, consisting of biosample collection, protein digestion and mass-spectra acquisition. Each of the steps can result in batch effects, that need to be accounted for before biological signal inference.
-Here, we  describe a step-by-step workflow that allows to identify batch effects, select appropriate methods for their correction and control the quality of the correction. We present a corresponding tool, a novel R package "proBatch" that implements each of the steps. 
-We also address several mass-spectrometry specific issues, associated with batch effects. First, we demontstrate MS signal deterioration, associated with sample running order. To address it, we propose a new correction procedure based on LOESS trend fitting. Then, we highlight the issue of batch-specific missingness patterns and discuss the problem of missing value imputation in the context of batch effects.
-We demonstrate the workflow and the package using three large  proteomics datasets, spanning 140-375 mass-spectromentry runs, representing different biological backgrounds and sources of batch effects. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods.
+Here, we present step-by-step workflow for batch effects analysis in proteomics. This workflow allows to assess batch effects in a given dataset, select appropriate methods for their correction and control the quality of the correction. This workflow addresses mass-spectrometry specific issues, such as gradual MS signal deterioration, and batch-specific missingness. We propose solutions for both issues. Corresponding tools are freely accessible as R package "proBatch".
 
- 
+We demonstrate the workflow on three large-scale  proteomics datasets. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods.
+
+\keywords{Batch effects, Quantitative proteomics, Normalization, Preprocessing, Quality Control}
 
 \end{abstract}
 
-\textit{The introduction begins after the abstract and is not preceded by the word ``Introduction.''}
+\section{Results}
 
 The introduction presents the purpose of the study and its relationship to earlier work in the field. It should not be an extensive review of the literature. It is usually less than one formatted page
 
@@ -90,8 +103,6 @@ The discussion is concise (usually less than two formatted pages) and focused on
 \section{Experimental Procedures}
 
 The experimental procedures are brief but sufficiently complete to permit a qualified reader to repeat the experiments. Only truly new procedures should be described in detail. Previously published procedures should be referenced. Modifications of previously published procedures should not be given in detail except where necessary to repeat the work. If the study characterizes the activity of new compounds, compound structures must be provided. Quantification of gel or blot intensities must be performed with data obtained within a linear range of exposure.
-
-\end{article}
 
 \begin{acknowledgments}
 Acknowledgments may include funding sources, brief note(s) of thanks to people who helped with the study or preparation of the paper (optional), and database names and accession codes (if applicable). 
