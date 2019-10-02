@@ -80,8 +80,9 @@ Normalization of proteomics data has been explored lately in several studies \ci
 
 In this study, we provide a systematic analysis of batch effect in proteomics. We review best practices in batch effect correction using two published datasets and demonstrate the novel approach for correction of mass-spectrometry drift affecting the third dataset, that has not been published before. We describe the pipeline as a clear sequence of steps that allow to choose the correction strategy and evaluate the performance of the correction procedure.
 
-\section{Workflow overview}
-Most of the data, acquired with high-throughput technologies, including MS-proteomics, can not be used in statistical analysis or model learning directly. The procedure ensuring comparability of the samples is know as batch correction. This procedure can be separated into the sequence of steps, as shown in Figure~\ref{fig:batch_fig1_workflow} and explained in more detail below.  
+\section{Addressing batch effects: the workflow}
+\subsection{Workflow overview}
+Most of the data, acquired with high-throughput technologies, including MS-proteomics, can not be used in statistical analysis or model learning directly. The procedure ensuring comparability of the samples is known as batch correction. This procedure can be separated into the sequence of steps, as shown in Figure~\ref{fig:batch_fig1_workflow} and explained in more detail below.  
 \begin{figure}[bt]
 	\center
 	\includegraphics[width=6cm]{figures/Fig0_workflow_staircase}
@@ -90,18 +91,14 @@ Most of the data, acquired with high-throughput technologies, including MS-prote
 	\label{fig:batch_fig1_workflow}
 \end{figure}
 
-\subsection{Second Level Heading}
-If data, scripts or other artefacts used to generate the analyses presented in the article are available via a publicly available data repository, please include a reference to the location of the material within the article.
+We suggest a five-step workflow to address batch effects in large-scale dataset. Initial assessment allows to evaluate whether batch effects are present in raw, unnormalized data and to select normalization procedure. Second, normalization brings all samples from the dataset to the common scale, typical methods of normalization being sample-wide quantile normalization and median normalization. Third step is diagnostics of batch effects in normalized data, with methods such as PCA, hierarchical clustering. This step determines whether further correction is required. If batch effects are still present in the data, a furter step of batch correction is required. Batch correction addresses feature-specific biases, commonly addresses with tools like ComBat \cite{Johnson:2007aa} or feature-specific mean/median centering. Finally, quality control ensures that the data has been improved by correction: biases have been reduces while meaningful signal has been retained.
 
-% Equations should be inserted using standard LaTeX equation and eqnarray environments, not as graphics, and should be set in the main text
-This is an equation, numbered
-\begin{equation}
-\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt{\pi}}{2}
-\end{equation}
-And one that is not numbered
-\begin{equation*}
-e^{i\pi}=-1
-\end{equation*}
+\subsection{Data processing preceding the workflow} 
+This workflow takes quantitative data matrix as an input. Thus, it is assumed that the workflow starts with the data matrix, for which peptide-spectrum matching, and FDR control are completed. We strongly suggest to perform the protein quantification after the batch effects correction, as this procedure alters the abundances of transition and peptide, and these abundances are critical for the protein quantity inference \cite{Clough:2012aa, Teo:2015aa}.  
+
+Also, we suggest to keep all detected peptides, also non-proteotypic and the ones with multiple missing values. Keeping all measurements allows to better evaluate the distribution within each sample, which is critical for subsequent normalization and batch adjustment steps.
+
+Data is assumed to be log-transformed, unless the variance stabilizing transformation \cite{Durbin2002} is used, as this normalization method has log-like transformation integrated into the normalization procedure.
 
 \subsection{Adding Citations and a References List}
 
