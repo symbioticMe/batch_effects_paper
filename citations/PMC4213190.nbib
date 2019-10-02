@@ -1,0 +1,75 @@
+PMID- 25374453
+OWN - NLM
+STAT- PubMed-not-MEDLINE
+DCOM- 20141106
+LR  - 20181113
+IS  - 1176-9351 (Print)
+IS  - 1176-9351 (Electronic)
+IS  - 1176-9351 (Linking)
+VI  - 13
+DP  - 2014
+TI  - A comprehensive comparison of normalization methods for loading control and variance 
+      stabilization of reverse-phase protein array data.
+PG  - 109-17
+LID - 10.4137/CIN.S13329 [doi]
+AB  - Loading control (LC) and variance stabilization of reverse-phase protein array 
+      (RPPA) data have been challenging mainly due to the small number of proteins in an 
+      experiment and the lack of reliable inherent control markers. In this study, we 
+      compare eight different normalization methods for LC and variance stabilization. The 
+      invariant marker set concept was first applied to the normalization of 
+      high-throughput gene expression data. A set of "invariant" markers are selected to 
+      create a virtual reference sample. Then all the samples are normalized to the 
+      virtual reference. We propose a variant of this method in the context of RPPA data 
+      normalization and compare it with seven other normalization methods previously 
+      reported in the literature. The invariant marker set method performs well with 
+      respect to LC, variance stabilization and association with the 
+      immunohistochemistry/florescence in situ hybridization data for three key markers in 
+      breast tumor samples, while the other methods have inferior performance. The 
+      proposed method is a promising approach for improving the quality of RPPA data.
+FAU - Liu, Wenbin
+AU  - Liu W
+AD  - Department of Bioinformatics and Computational Biology, Unit 1410, The University of 
+      Texas MD Anderson Cancer Center, Houston, TX, USA.
+FAU - Ju, Zhenlin
+AU  - Ju Z
+AD  - Department of Bioinformatics and Computational Biology, Unit 1410, The University of 
+      Texas MD Anderson Cancer Center, Houston, TX, USA.
+FAU - Lu, Yiling
+AU  - Lu Y
+AD  - Department of Systems Biology, The University of Texas MD Anderson Cancer Center, 
+      Houston, TX, USA.
+FAU - Mills, Gordon B
+AU  - Mills GB
+AD  - Department of Systems Biology, The University of Texas MD Anderson Cancer Center, 
+      Houston, TX, USA.
+FAU - Akbani, Rehan
+AU  - Akbani R
+AD  - Department of Bioinformatics and Computational Biology, Unit 1410, The University of 
+      Texas MD Anderson Cancer Center, Houston, TX, USA.
+LA  - eng
+GR  - P30 CA016672/CA/NCI NIH HHS/United States
+PT  - Journal Article
+DEP - 20141016
+TA  - Cancer Inform
+JT  - Cancer informatics
+JID - 101258149
+PMC - PMC4213190
+OTO - NOTNLM
+OT  - RPPA
+OT  - normalization
+OT  - proteomics
+OT  - reverse-phase protein array
+EDAT- 2014/11/07 06:00
+MHDA- 2014/11/07 06:01
+CRDT- 2014/11/07 06:00
+PHST- 2013/10/01 00:00 [received]
+PHST- 2014/07/07 00:00 [revised]
+PHST- 2014/07/07 00:00 [accepted]
+PHST- 2014/11/07 06:00 [entrez]
+PHST- 2014/11/07 06:00 [pubmed]
+PHST- 2014/11/07 06:01 [medline]
+AID - 10.4137/CIN.S13329 [doi]
+AID - cin-13-2014-109 [pii]
+AID - cin-13-2014-109 [pii]
+PST - epublish
+SO  - Cancer Inform. 2014 Oct 16;13:109-17. doi: 10.4137/CIN.S13329. eCollection 2014.
