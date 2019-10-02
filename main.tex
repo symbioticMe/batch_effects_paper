@@ -80,10 +80,14 @@ Normalization of proteomics data has been explored lately in several studies \ci
 
 In this study, we provide a systematic analysis of batch effect in proteomics. We review best practices in batch effect correction using two published datasets and demonstrate the novel approach for correction of mass-spectrometry drift affecting the third dataset, that has not been published before. We describe the pipeline as a clear sequence of steps that allow to choose the correction strategy and evaluate the performance of the correction procedure.
 
+\section{Workflow overview}
+Most of the data, acquired with high-throughput technologies, including MS-proteomics, can not be used in statistical analysis or model learning directly. The procedure ensuring comparability of the samples is know as batch correction. This procedure can be separated into the sequence of steps, as shown in Figure~\ref{fig:batch_fig1_workflow} and explained in more detail below.  
 \begin{figure}[bt]
-\centering
-\includegraphics[width=6cm]{figures/example-image-rectangle}
-\caption{Although we encourage authors to send us the highest-quality figures possible, for peer-review purposes we are can accept a wide variety of formats, sizes, and resolutions. Legends should be concise but comprehensive – the figure and its legend must be understandable without reference to the text. Include definitions of any symbols used and define/explain all abbreviations and units of measurement.}
+	\center
+	\includegraphics[width=6cm]{figures/Fig0_workflow_staircase}
+	\caption[Batch effect correction workflow]
+	{Batch effect processing workflow}
+	\label{fig:batch_fig1_workflow}
 \end{figure}
 
 \subsection{Second Level Heading}
