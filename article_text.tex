@@ -19,8 +19,6 @@
 
 \title{Batch effects in large-scale proteomics studies: diagnostics and correction}
 
-\abbrevs{PCA, Principle Component Analysis; PVCA, Principal Variance Component Analysis; CV, Coefficient of Variance; MS, mass spectrometry.}
-
 \author[1, 2, 3]{Jelena Čuklina}
 \author[1]{Chloe Lee}
 \author[1]{Evan G. Williams}
@@ -37,6 +35,7 @@
 \affil[4]{ETH Zürich, PHRT-MS, Zürich, Switzerland}
 \affil[5]{Faculty of Science, University of Zurich, Zurich, Switzerland}
 
+\corraddress{Ruedi Aebersold, Institute of Molecular Systems Biology, ETH Zurich, Zurich, CH-8093, Switzerland}
 \corremail{aebersold@imsb.biol.ethz.ch}
 
 
@@ -57,8 +56,7 @@ Here, we present step-by-step workflow for batch effects analysis in proteomics.
 
 We demonstrate the workflow on three large-scale  proteomics datasets. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods.
 
-\keywords{Batch effects, Quantitative proteomics, Normalization, Preprocessing, Quality Control}
-
+\keywords{Batch effects, Quantitative proteomics, Normalization}
 \end{abstract}
 
 \section{Results}
@@ -92,7 +90,7 @@ Data 2 & 49.2 & 0.52
 \label{tab:sample}
 \end{table}
 
-References, such as \cite{macdonald1995difference,sambrook1989molecular,waskiewicz1997mitogen,back:etal:2017}, must be cited in text by number only, be numbered consecutively in the order of appearance, and must include article titles, as in these examples. 
+References, such as \cite{Gregori2012}, must be cited in text by number only, be numbered consecutively in the order of appearance, and must include article titles, as in these examples. 
 
 Reference management systems such as Zotero and Mendeley provide options for exporting bibliographies as Bib\TeX{} files. Bib\TeX{} is a bibliographic tool that is used with \LaTeX{} to help organize the author's references and create a bibliography. This template contains an example of such a file, \texttt{sample.bib}, which can be replaced with your own. Use the \verb|\cite| command  to create in-text citations.
 
@@ -104,20 +102,16 @@ The discussion is concise (usually less than two formatted pages) and focused on
 
 The experimental procedures are brief but sufficiently complete to permit a qualified reader to repeat the experiments. Only truly new procedures should be described in detail. Previously published procedures should be referenced. Modifications of previously published procedures should not be given in detail except where necessary to repeat the work. If the study characterizes the activity of new compounds, compound structures must be provided. Quantification of gel or blot intensities must be performed with data obtained within a linear range of exposure.
 
-\begin{acknowledgments}
-Acknowledgments may include funding sources, brief note(s) of thanks to people who helped with the study or preparation of the paper (optional), and database names and accession codes (if applicable). 
-\end{acknowledgments}
+\section*{acknowledgements}
+Acknowledgements should include contributions from anyone who does not meet the criteria for authorship (for example, to recognize contributions from people who provided technical help, collation of data, writing assistance, acquisition of funding, or a department chairperson who provided general support), as well as any funding or other support information.
 
-\begin{conflict}
-Statement disclosing whether there are any actual or perceived conflicts of interest on the part of any author. If there are no conflicts of interest, insert the following statement: The authors declare that they have no conflicts of interest with the contents of this article. Review the “Conflicts of interest” section of the \href{http://www.jbc.org/site/misc/edpolicy.xhtml}{JBC Editorial Policies}.
-\end{conflict}
+\section*{conflict of interest}
+You may be asked to provide a conflict of interest statement during the submission process. Please check the journal's author guidelines for details on what to include in this section. Please ensure you liaise with all co-authors to confirm agreement with the final statement.
+
 
 %% Bibliography 
-\bibliographystyle{jbc-new}
-\bibliography{sample}
+\bibliography{proteomics_thesis}
 
-\begin{footnotes}
-Footnotes should include details such as grant information, and any abbreviations used within the article.
-\end{footnotes}
+\graphicalabstract{example-image-1x1}{Please check the journal's author guildines for whether a graphical abstract, key points, new findings, or other items are required for display in the Table of Contents.}
 
 \end{document}
