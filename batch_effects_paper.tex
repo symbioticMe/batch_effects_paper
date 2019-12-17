@@ -100,13 +100,6 @@ Also, we suggest to keep all detected peptides, also non-proteotypic and the one
 
 Data is assumed to be log-transformed, unless the variance stabilizing transformation \cite{Durbin2002} is used, as this normalization method has log-like transformation integrated into the normalization procedure.
 
-The diagnostic approaches can be divided in proteome-wide and peptide-level approaches. The main approaches for \underline{\textbf{proteome-wide diagnostics}} are:
-\begin{enumerate}
-	\item \textbf{Hierarchical clustering} is an algorithm that groups similar samples into a tree-like structure called dendrogram. Similar samples cluster together and the driving cause of this similarity can be visualized by coloring the leaves of the dendrogram by technical and biological variables. Hierarchical clustering is often combined with the heatmap, that facilitates the assessment of patterns in the dataset.
-	\item \textbf{Principal Component Analysis} is a technique that emphasizes the strong patterns of variation in the dataset. It identifies the leading directions of variation, known as principal components. The projection of data on two principal components allows to visualize sample proximity. This technique is particularly convenient to assess replicate similarity. 
-	\item \textbf{Principal Variance Component Analysis} The main advantage of this approach is the quantification of the variance, associated with each covariate, both technical and biological. Briefly, principal variance component analysis uses a linear model to match each principal component to the sources of variation and weighs the variance of each covariate by the eigenvalue of the PC. Thus, the resulting value reflects the variance explained by that covariate. 
-\end{enumerate} 
-
 \subsection{Adding Citations and a References List}
 
 Please use a \verb|.bib| file to store your references. When using Overleaf to prepare your manuscript, you can upload a \verb|.bib| file or import your Mendeley, CiteULike or Zotero library directly as a \verb|.bib| file\footnote{see \url{https://www.overleaf.com/blog/184}}. You can then cite entries from it, like this: \cite{Gregori2012}. Just remember to specify a bibliography style, as well as the filename of the \verb|.bib|.
