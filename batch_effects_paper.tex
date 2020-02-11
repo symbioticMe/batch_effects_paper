@@ -58,11 +58,13 @@
 \maketitle
 
 \begin{abstract}
-Advances in mass spectrometry based proteomics have significantly increased sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Increased sample numbers, however, come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. 
+Advances in mass spectrometry-based proteomics have significantly increased sample throughput and sample to sample reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine. Increased sample numbers, however, come at the price of introducing batch effects, that decrease the power to identify the underlying biological variance. 
 
-Here, we present step-by-step workflow for batch effects analysis in proteomics. This workflow allows to assess batch effects in a given dataset, select appropriate methods for their correction and control the quality of the correction. This workflow addresses mass-spectrometry specific issues, such as gradual MS signal deterioration, and batch-specific missingness. We propose solutions for both issues. Corresponding tools are freely accessible as R package "proBatch".
+Here, we present step-by-step workflow for batch effects analysis in proteomics. This workflow allows to assess batch effects in a given dataset, select appropriate methods for their adjustment and control the quality of this adjustment. Corresponding tools are freely accessible via the R package "proBatch".
+In addition to a general workflow, we propose a new solution for gradual MS signal deterioration, which is a mass spectrometry specific bias. We investigate in depth batch-related missingness and the missing value imputation problem, as they affect batch effects adjustment and analysis.
 
-We demonstrate the workflow on three large-scale  proteomics datasets. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods.
+We demonstrate the workflow on three large-scale proteomics datasets. Although applied to DIA proteomics, the principles described here are expected to be applicable to wide range of proteomic methods. The code, accompanying the analysis, is also available.
+
 
 \keywords{Batch effects, Quantitative proteomics, Normalization}
 \end{abstract}
