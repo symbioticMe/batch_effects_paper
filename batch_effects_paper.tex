@@ -24,7 +24,9 @@
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{lscape}
-\usepackage[format=plain]{caption}
+\usepackage[font=small,format=plain,labelfont=bf,textfont=normal, justification=justified,singlelinecheck=false]{caption}
+\usepackage{capt-of}
+\usepackage{afterpage}
 
 \newcommand{\squishlist}{%
 	\begin{list}{-}%
@@ -37,6 +39,13 @@
 			\setlength{\labelsep}{0.5em}}}
 	
 \newcommand{\squishend}{\end{list}}
+
+\newcommand{\beginsupplement}{%
+	\setcounter{table}{0}
+	\renewcommand{\thetable}{S\arabic{table}}%
+	\setcounter{figure}{0}
+	\renewcommand{\thefigure}{S\arabic{figure}}%
+}
 
 % Update article type if known
 \papertype{Original Article or Review?}
@@ -254,7 +263,7 @@ A stronger positive control is reproducibility check. In biomedical research, on
  
 We propose two methods, that do not rely on large sample size. These positive control methods are applicable to most proteomic experiments. The first is based on correlation of samples: it is expected, that replicates correlation is higher than the correlation of unrelated samples. Although it is conceivable that occasional replicates correlate less than some unrelated sample pairs, the distribution of replicate correlations should be clearly shifted upwards and this distinction should be strengthened by batch adjustment procedures. The second assessment method is specific for bottom-up proteomics, and makes use of peptide correlation: correlation of unrelated peptides is expected to be close to zero, while peptides of the same protein are likely to be positively correlated. Since tens of thousands of peptides are routinely detected in modern high-throughput proteomic experiment this metric is a reliable readout of data quality.
 
-\section{Dataset description (?=Materials)}
+\section{Dataset description (?=Materials)}\label{subsec:datasets}
 
 \textcolor{red}{\textbf{\hl{Write a few words on the datasets}}}
 
@@ -311,9 +320,45 @@ We propose two methods, that do not rely on large sample size. These positive co
 	\end{table}
 \end{landscape}
 
-\section{Case Studies}
+\section{Case Studies}\label{subsec:case_studies}
+\subsection{Initial assessment}
+The main goal of the initial assessment is to set a baseline for the magnitude and nature of batch effects in a particular dataset. At this stage the data matrix is “raw” in a sense, that the quantities are reported as measured, without any calibration, normalization or correction with regard to the quantities in other samples.
 
 
+\begin{figure}[bt]
+	%\center
+	\includegraphics[width=\textwidth]{figures/Fig1_initial_assessment_v5_edited.pdf}
+	
+	\caption{\textbf{Initial assessment and normalization} \\
+		(A) Mean Intensity vs sample running order with repeatedly replicated samples shown in color; (B) Distribution of sample correlations - between batches, within batches and in replicated samples; (C) Representative "Acads" protein QTL, that cannot be detected due to the signal drift; (D) Boxplots of sample intensities in raw, unnormalized data; (E) Boxplots of sample intensities after normalization}
+	\label{fig:batch_fig2_initAssessment}
+\end{figure}
+
+Thus, it is essential to get a quick overview of the data by comparing global statistics, such as average intensity or correlation of samples, and few individual proteins, for which there is some prior information on their expected abundance. In mass-spectrometry, it is important to plot these statistics in a sample running order, as it is not uncommon, that the signal measured starts to drift. This is clearly seen on Figure~\ref{fig:batch_fig2_initAssessment}A, where average intensity is plotted vs sample running order. In this case, the intensity tended to deteriorate after 50-70 samples, and interrupting the acquisition for cleaning and calibrating the instrument determined the mass-spectrometry batch. As this type of bias is not entirely plannable, it is particularly important to randomize the samples before running and to include replicate samples for control (for more details on sample replication see Section~\ref{subsec:datasets}“Dataset description”). 
+
+Batch effects introduce not only intensity shifts of total sample, but also lead to spurious correlation between features (in proteomics, fragments, peptides or proteins). It is common, that samples that belong to the same batch have strong correlation (as seen on Figure~\ref{fig:batch_fig2_initAssessment}B, Supplementary Fig.1AB), not only stronger than the correlation of samples from different batches (“between batches”), but often stronger than the correlation of replicates. This is why it is important to assess correlation distributions as early as possible. Sample correlation can be visualized as the square heatmap (InterLab Study, Supp.Fig 1AB) or the distribution boxplot with or without violin plot (Figure~\ref{fig:batch_fig2_initAssessment}B), first preferred with smaller sample sizes and the latter preferable for large datasets (the boundary being roughly 150 samples).
+
+Optionally, one can complement initial assessment with the analysis of few specific individual features (peptides or proteins), for which prior information is known. In our case, we plotted several proteins with known quantitative trait loci (QTL), to see if the alleles can be separated in this dataset. However, as seen in Figure~\ref{fig:batch_fig2_initAssessment}C, in this case the intensity drift prevents QTL detection.
+
+Finally, we would like to mention boxplot, the plot that is most powerful for initial batch effects assessment: intensity boxplots in one plot demonstrate median, quantiles and outliers. This allows to see, whether there are batch-specific intensity patterns such as shifts (as in InterLab study, see Supplementary Fig1A), or drifts (as in Figure~\ref{fig:batch_fig2_initAssessment}D), or no evident batch-associated pattern can be spotted (PanCancer data, Supplementary Fig.2A). To detect the patterns, the samples should be sorted by running order or by batch (if the batches, such as digestion batches have been randomized for running). In some cases, intensity patterns are easier to spot on average intensity plot (compare to Figure~\ref{fig:batch_fig2_initAssessment}A). Nevertheless, for most cases, boxplots allow to determine, if general intensities of samples differ substantially and whether these differences are batch-specific.
+
+\subsection{Normalization}
+
+The normalization is an essential step in removing bias from the data as it brings the samples to the same scale, making the measured quantities comparable. As stated in “protocol overview”, the choice of normalization should take two factors into account: 
+heterogeneity, as assessed from previous knowledge, and mean/median/variance, as indicated by initial assessment.
+The most common type of normalization, quantile normalization, is applicable to wide range of samples and that was a method of choice for Aging mouse data and PanCancer dataset. As demonstrated in Fig.2D and 2E (and Supplementary Fig.2 A and B correspondingly), quantile normalization literally makes the distributions very similar: not only means or quantiles are shifted to the same range, but all quantiles, including outliers become the same. This feature that is sought after for the samples, where the majority of features are not expected to change, can become a problem in cases, where outliers bear important information.
+Median centering normalization only brings the medians to the same scale and thus is a “mild” normalization. This is the type of normalization that has been applied to InterLab study. This normalization improved the made the quantities of peptides as measured at different sites much closer than they were before (see Supplementary Figure 1C). Thus, shifting the medians to the same value (see Supplementary Figure 1B) removed substantial portion of bias and thus achieved the goal of making the measurements in different samples comparable. The improvement of the signal quantity is also seen from the improved protein quantification precision: coefficient of variation has shrunk for the majority of proteins (see Supplementary Fig. 1 E).
+This means, that in certain cases normalization alone is sufficient and no further correction is needed. In this case, improvement of quantification of spike-in peptides and protein CV decrease serves as quality control, skipping the intermediate step.
+In other cases, however, additional correction of batch effects is needed to complete the adjustment of the data. Whether the correction of batch effects is needed, can be determine with batch effects diagnostics.
+
+
+\subsection{Diagnostics}
+
+\subsection{Batch effects correction}
+
+\subsection{Quality Control}
+
+\afterpage{%
 \begin{tcolorbox}
 	\section*{Box 3: Missing values}
 	\label{box:Box3_missingness}
@@ -323,39 +368,41 @@ We propose two methods, that do not rely on large sample size. These positive co
 	
 	Missing values are often imputed, by filling with zeros, random small values \cite{Tyanova:2016aa} or re-quantification of elution traces \cite{Rost2016}. Such imputation, however, can introduce bias that is batch-specific or peptide-specific, as seen in  \textcolor{red}{\textbf{\hl{(Supp Fig Xa)}}}. This bias skews the diagnostics, such as hierarchical clustering, PCA or PVCA: batch effects will be overestimated, as clustering pattern will be driven by missing values Fig~\ref{fig:batch_fig4_missing_values}A. One way to circumvent this effect is to vary the fraction of missing values to assess, to what extent the batch effects are driven by shifts in consistently quantified peptides vs technical missingness patterns \textcolor{red}{\textbf{\hl{Supp Fig Xb}}}.
 	
-	Imputed values may bias the downstream conclusions As shown in Fig ~\ref{fig:batch_fig4_missing_values}B and C, if "requant" values are used, the correlation within batches seems higher than the correlation of replicates, indicating poor data quality, while without "requant" values the correlation of replicates clearly exceeds correlation of samples within the same batch, which means that the data is reasonably good even before batch correction. 
+	Imputed values may bias the downstream conclusions As shown in Fig ~\ref{fig:batch_fig4_missing_values}B and C, if "requant" values are used, the correlation within batches seems higher than the correlation of replicates, indicating poor data quality, while with "no requants" the replicates correlate higher than other samples. 
 	
-	For many downstream analysis techniques, such as differential expression or protein correlation analyses, missing values are not a problem, provided that there are enough confidently quantified values. Thus, we advise to avoid imputation, or perform it after batch correction, as imputation might introduce more bias than it fixes. 
+	For many downstream analysis techniques, such as differential expression or protein correlation analyses, missing values are not a problem, provided that there are enough confidently quantified values. Thus, we advise to avoid imputation, or perform it after batch correction. 
 	
 		\begin{minipage}[h]{\linewidth}
-			\center
+			%\center
 			\includegraphics[width=.9\textwidth]{figures/Fig4_missing_values.pdf}
-			\captionof{figure}{\textbf{The problem of missing values in batch effect diagnosis and correction} }
+			\captionof{figure}[l]{\textbf{The problem of missing values in batch effect diagnosis and correction} }
 			\label{fig:batch_fig4_missing_values}
-			{\footnotesize  (A) Hierarchical clustering of normalized peptide abundance data; Missing values are shown in black. The missing values are non-randomly associated with the batch;
+			{\footnotesize  (A) Hierarchical clustering of normalized data; Missing values are shown in black. The missing values are non-randomly associated with the batch;
 				(B) Heatmap of selected sample correlation: stronger correlation of samples within Batch 2(blue) and Batch 3 (brown) is visible in the data with "requants", and replicate correlation is much more prominent in the data without "requants";
 			(C) Distribution of selected sample correlation: same effect, as in (B) is shown with violin plots of sample correlation.}
 		\end{minipage}
 \end{tcolorbox}
+	\clearpage
+}
 
 
 
 
 
-
-\subsection*{Supplementary files}
+\section*{Supplementary files}
 Links to the data files, proBatch code, manuscript code.
 
-\section*{contributions}
+\section*{Contributions}
 
 Contributions
 J.~Č and P.~P. designed the analysis workflow and wrote the manuscript. J.~Č., C. ~L., E.~W. and V.~S. performed data analysis. J.~Č., C.~L. and P.~P. implemented back-end R functionality, E.~W. contributed to the code testing and introduced multiple components in the workflow. E.~W., T.~S. and B.~C. provided proteomic data and contributed to workflow conceptualization. M.~R.-M. provided critical input on the project and assisted in analysis pipeline design. P.~P. and R.~A. supervised the study.
 
-\section*{acknowledgements}
+\section*{Acknowledgements}
 1. Guy who wrote "split violinplot" function. Qing Zhong and Rebecca Poulos.
 
-\section*{conflict of interest}
+\section*{Conflict of interest}
 Authors declare no conflict of interests
+
 
 \printendnotes
 
@@ -363,5 +410,28 @@ Authors declare no conflict of interests
 \bibliography{batch_references}
 
 \graphicalabstract{example-image}{Please check the journal's author guidelines for whether a graphical abstract, key points, new findings, or other items are required for display in the Table of Contents.}
+
+\newpage
+\section{Supplementary Material}
+\beginsupplement
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth,height=.9\textheight,keepaspectratio]{figures/Supp_InterLab.pdf}
+	\caption{\textbf{Batch effects in InterLab study}\\
+		 \footnotesize  (A) Boxplots of raw sample intensities colored by MS spectra acquisition sites; (B) Sample correlation heatmap, top row and left column colored by MS spectra acquisition sites, used as a quality control; (C) Comparison of two spike-in peptide quantification in raw and normalized data; (D) Boxplots of median-normalized sample intensities; (E) Quality control by comparing coefficient of variance (CV) for proteins, binned by Log10 abundance.}
+	\label{fig:batch_figS1_InterLab}
+\end{figure}
+
+\begin{figure}
+	%\center
+	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer}
+	
+	\caption{\textbf{Batch effects in PanCancer study} \\
+		\footnotesize (A) Boxplots of raw sample intensities colored colored by digestion batch; (B) Boxplots of normalized sample intensities colored colored by digestion batch; 
+		(C) Intensity of spike-in Fetubin in raw data; (D) Intensity of spike-in Fetubin in batch corrected data; (E) Hierarchical clustering and the heatmap of raw protein-level data; (F) Hierarchical clustering and the heatmap of batch corrected protein-level data; (G) Hierarchical clustering of normalized data with Manhattan distance, with replicated samples colored; (H) Hierarchical clustering of batch corrected data with Manhattan distance, with replicated samples colored.}
+	\label{fig:batch_figS2_PanCancer}
+\end{figure}
+
 
 \end{document}
