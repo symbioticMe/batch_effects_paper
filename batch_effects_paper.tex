@@ -109,7 +109,7 @@ Batch effects are a problem affecting not only proteomics, but literally all qua
 Mass spectrometry methods in proteomics, DDA, DIA, TMT, suffer from a number of problems, unknown to genomic technologies. First, there is the problem of peptide to protein inference \cite{Clough:2012aa, Teo:2015aa, Rosenberger2014a, Choi2014, Muntel:2019aa}. As protein quantities are inferred from the quantities of measured peptides or even fragment ions, there is a question, on which level should the data be corrected. Second, it is known that missing values in mass spectrometry are often associated with technical factors \cite{Karpievitch2012, Matafora2017}. Finally, particularly high sample numbers, typically order of hundred or more, may suffer from MS signal drift, that needs to be accounted for. We include the discussion of these problems, and suggest solutions in multiple sections of this tutorial.
 % \cite{Luan2018, Shen2016}
 
-To bring the workflow into a practical context, we use three large-scale studies to illustrate the corresponding steps. All datasets have been acquired using SWATH-MS technology. The considerations described here and the conceptual workflow, however, are generic and are also applicable to other mass spectrometry based proteomic methods. \textcolor{red}{\textbf{For the purpose of user friendliness, we implemented this protocol as an  R package “proBatch”, already available on Bioconductor, and supplement the case studies with the corresponding code using the package}} \textcolor{blue}{THIS IS REDUNDANT WITH \textbf{WORKFLOW OVERVIEW} - WHERE DOES THIS BELONG?}. 
+To bring the workflow into a practical context, we use three large-scale studies to illustrate the corresponding steps. All datasets have been acquired using SWATH-MS technology. The considerations described here and the conceptual workflow, however, are generic and are also applicable to other mass spectrometry based proteomic methods. %\textcolor{red}{\textbf{For the purpose of user friendliness, we implemented this protocol as an  R package “proBatch”, already available on Bioconductor, and supplement the case studies with the corresponding code using the package}} \textcolor{blue}{THIS IS REDUNDANT WITH \textbf{WORKFLOW OVERVIEW} - WHERE DOES THIS BELONG?}. 
 
 
 This paper is organized as follows: first, we provide a brief overview of the workflow and define key terms for each step.  Next, we describe the datasets, used to define and test the workflow. We then expand each step in "Case studies", primarily using the largest of three datasets, Aging Mice Study, to illustrate the steps, and refer to other two datasets, when appropriate. Additionally, we devote a specialized section to the problem of missing values in relation to batch effects and indicate the caution points related to missing value imputation. We finish the manuscript with discussion of generalizability of the principles described to other methods or data acquisition, in proteomics and beyond and outline the expected developments in batch effects research.
@@ -134,25 +134,41 @@ This paper is organized as follows: first, we provide a brief overview of the wo
 \section{Addressing batch effects: the workflow}
 
 The purpose of this article is to guide researchers, who work with large-scale proteomic data sets, towards minimizing bias in the data and maximizing the robustness and reproducibility of the results acquired from such datasets. The protocol describes the workflow starting from quantified spectra, that we term “raw data matrix” and finishing with "batch-adjusted" data, ready for downstream analysis, such as differential expression or network inference. We split the workflow in five steps, shown in Figure~\ref{fig:batch_fig1_workflow}, and describe each of the step described in the following paragraphs. In the scope of this manuscript, we will use the term “adjust for batch effects” for the whole workflow, and “correct for batch effects” for correction of normalized data, and other terms, as defined in  \hyperref[box:Box1_definitions]{Box 1 "Terminology"}. 
-We provide a checklist that summarizes the most important points of the protocol in \hyperref[box:Box1_definitions]{Box 2 "Batch effects processing checklist"}.
+
+We provide a checklist that summarizes the most important points of the protocol in \hyperref[box:Box2_checklist]{Box 2 "Batch effects processing checklist"}.
 
 Batch effects can only be corrected if batch factors have been considered in experimental design, otherwise, the data can be biased beyond repair  \cite{Hu2005, Gilad2015}. Experimental design is a complex issue, spanning beyond the scope of this article, however, the reader can use previously published materials on the topic \cite{Oberg2009, Cuklina2020}. With careful experimental design, batch effects can be adjusted for, uncovering biological signal in the data. 
  
 In the package “proBatch”, accompanying the manuscript, we implemented several methods, that have proven utility in batch effects analysis and adjustment. For various other tools that might be useful in this context, we provide tips for making them compatible. The comparison of various methods is beyond the scope of the manuscript, but some good comparison have been already published \cite{Chawade:2014aa, Luo2010}. Instead, we summarize the best practices from these papers, reviews \cite{Lazar:2013aa, Leek:2010aa}  and application papers \cite{Sajic2018, Collins2017}, and turn them into principles that also guide the reader in method choice. \textcolor{blue}{SHALL I WRITE A SMALL SECTION ABOUT PROBATCH?}
 
-\textcolor{red}{\textbf{In the next section, “Case studies” we will illustrate the application of this workflow to large-scale proteomic data. We provide the code for the analysis of each of the three datasets in “Supplementary Materials”, while the functions used in each step can be found in the R package “proBatch"}} \textcolor{blue}{THIS IS REDUNDANT WITH INTRODUCTION - WHERE DOES THIS BELONG?}. 
+\textcolor{red}{\textbf{In the next section \ref{subsec:case_studies} “Case studies” we will illustrate the application of this workflow to large-scale proteomic data. We provide the code for the analysis of each of the three datasets in “Supplementary Materials”, while the functions used in each step can be found in the R package “proBatch"}} \textcolor{blue}{THIS IS REDUNDANT WITH INTRODUCTION - WHERE DOES THIS BELONG?}. 
 
 \begin{figure}[bt]
 	\center
 	\includegraphics[width=6cm]{figures/Fig0_workflow_staircase}
 	\caption[Batch effect correction workflow]
-	{Batch effect processing workflow}
+	{\textbf{Batch effect processing workflow}}
 	\label{fig:batch_fig1_workflow}
 \end{figure}
 
 %We suggest a five-step workflow to address batch effects in large-scale dataset. Initial assessment allows to evaluate whether batch effects are present in raw, unnormalized data and to select normalization procedure. Second, normalization brings all samples from the dataset to the common scale, typical methods of normalization being sample-wide quantile normalization and median normalization. Third step is diagnostics of batch effects in normalized data, with methods such as PCA, hierarchical clustering. This step determines whether further correction is required. If batch effects are still present in the data, a furter step of batch correction is required. Batch correction addresses feature-specific biases, commonly addresses with tools like ComBat \cite{Johnson:2007aa} or feature-specific mean/median centering. Finally, quality control ensures that the data has been improved by correction: biases have been reduces while meaningful signal has been retained. In the next sections, we discuss each step of the workflow in more detail, illustrating it with examples from three large-scale proteomic datasets.
 
-\begin{table}[h]
+\subsection{Data matrix before adjustment}
+
+This workflow starts with raw data matrix, for which initial steps, such as peptide-spectrum matching, quantification, and FDR control are completed. Data is assumed to be log-transformed, unless the variance stabilizing transformation \cite{Durbin2002} is used. In that case, data transformation gets included into the normalization procedure. 
+
+We strongly suggest to perform the batch affect adjustment on peptide or fragment ion level, as this procedure alters feature abundances, and these abundances are critical for the protein quantity inference \cite{Clough:2012aa, Teo:2015aa}.  
+
+Also, we encourage to keep all detected peptides, and not to filter out any measurements during batch effects adjustment. This means, that also non-proteotypic and the ones with numerous missing values should be used during batch effects adjustment procedure. Keeping all measurements allows to better evaluate the intensity distribution within each sample, which is critical for subsequent normalization and correction steps.
+
+\subsection{Initial assessment}
+In most cases, the intensities of samples are different from each other. Comparing global quantitative properties such as sample medians or standard deviations helps with the choice of normalization method and point to specific technical factors, such as MS instrument, that needs more control. 
+
+Three approaches are useful for initial assessment: 1) plotting sample average or mean, in order of MS measurement or digestion batch, allows a precise estimation of MS drift or discrete bias in each batch; 2) Boxplots allow to assess the variance and check the samples for outliers; 3) Correlation of samples shows, whether there is a tendency of samples from the same batch to be more similar than unrelated samples. Since: samples from the same batch have no biological similarity, such correlation is a clear sign of bias.
+
+Initial assessment sets the baseline for bias magnitude and sources and facilitates the choice of normalization method.
+
+\begin{table}[hbt]
 	\begin{tcolorbox}
 		\section*{Box 2: Batch effects processing checklist}
 		\label{box:Box2_checklist}
@@ -199,21 +215,11 @@ In the package “proBatch”, accompanying the manuscript, we implemented sever
 		
 	\end{tcolorbox}
 \end{table}
+\clearpage
 
-\subsection{Data matrix before adjustment}
+ 
 
-This workflow starts with raw data matrix, for which initial steps, such as peptide-spectrum matching, quantification, and FDR control are completed. Data is assumed to be log-transformed, unless the variance stabilizing transformation \cite{Durbin2002} is used. In that case, data transformation gets included into the normalization procedure. 
 
-We strongly suggest to perform the batch affect adjustment on peptide or fragment ion level, as this procedure alters feature abundances, and these abundances are critical for the protein quantity inference \cite{Clough:2012aa, Teo:2015aa}.  
-
-Also, we encourage to keep all detected peptides, and not to filter out any measurements during batch effects adjustment. This means, that also non-proteotypic and the ones with numerous missing values should be used during batch effects adjustment procedure. Keeping all measurements allows to better evaluate the intensity distribution within each sample, which is critical for subsequent normalization and correction steps. 
-
-\subsection{Initial assessment}
-In most cases, the intensities of samples are different from each other. Comparing global quantitative properties such as sample medians or standard deviations helps with the choice of normalization method and point to specific technical factors, such as MS instrument, that needs more control. 
-
-Three approaches are useful for initial assessment: 1) plotting sample average or mean, in order of MS measurement or digestion batch, allows a precise estimation of MS drift or discrete bias in each batch; 2) Boxplots allow to assess the variance and check the samples for outliers; 3) Correlation of samples shows, whether there is a tendency of samples from the same batch to be more similar than unrelated samples. Since: samples from the same batch have no biological similarity, such correlation is a clear sign of bias.
-
-Initial assessment sets the baseline for bias magnitude and sources and facilitates the choice of normalization method.
 
 \subsection{Normalization}
 
@@ -333,11 +339,12 @@ Thus, these datasets reflect various applications of large-scale proteomic studi
 The main goal of the initial assessment is to set a baseline for the magnitude and nature of batch effects in a particular dataset. At this stage the data matrix is “raw” in a sense, that the quantities are reported as measured, without any calibration, normalization or correction with regard to the quantities in other samples.
 
 
-\begin{figure}[bt]
+\begin{figure}[hbt]
 	%\center
 	\includegraphics[width=\textwidth]{figures/Fig1_initial_assessment_v5_edited.pdf}
 	
 	\caption{\textbf{Initial assessment and normalization} \\
+		\footnotesize
 		(A) Mean Intensity vs sample running order with repeatedly replicated samples shown in color; (B) Distribution of sample correlations - between batches, within batches and in replicated samples; (C) Representative "Acads" protein QTL, that cannot be detected due to the signal drift; (D) Boxplots of sample intensities in raw, unnormalized data; (E) Boxplots of sample intensities after normalization}
 	\label{fig:batch_fig2_initAssessment}
 \end{figure}
@@ -365,7 +372,41 @@ In other cases, however, additional correction of batch effects is needed to com
 
 \subsection{Diagnostics}
 
+\begin{figure}[hbt]
+	%\center
+	\includegraphics[width=\textwidth]{figures/Fig2_diagnostics.pdf}
+	
+	\caption{\textbf{Diagnostics of batch effects}  \\
+		\footnotesize
+		(A) Principal Components \#1 and \#2 colored by MS batch (left) and Replicates (right), where the effect of clustering by batch is dominating, but the replicated samples are closer to each other than just random samples; (B) Hierarchical clustering of samples, with leaves colored by Diet, digestion batch, MS batch and Date-time of sample acquisition: domination of technical factors is clearly visible; (C) Principal Variance Component Analysis of peptides, detected in >50\% of samples demonstrates, that the technical factors, such as MS batch, digestion batch and their combination has profound effect on the data, while biological factors such as Strain, Sex and Age account for much smaller fraction of variance; (D) Peptide-level plots for two iRT peptides demonstrate, that batch effect manifests also as MS signal drift that requires correction}
+	\label{fig:batch_fig3_diagnostics}
+\end{figure}
+
+Normalization harmonizes overall sample intensities, however, batch effects can still be present and bias the quantities of many peptides and proteins.
+Various methods can be used to assess the extent of bias in the data. Most of them characterize the dataset as a whole, thus working on proteome level. Methods like Principal Components Analysis and Hierarchical Clustering are the most established as they allow to visualize factors, underlying the similarity of the samples.
+Principal Component Analysis (PCA) is a method that transforms the data matrix into a linear combination of “components” representing directions of highest variance in the data. This is why plotting first few components and coloring the samples by technical and biological factors or highlighting replicated samples provides a way to check, what drives the sample proximity. In Aging Mice, this makes certain patterns apparent (see Figure~\ref{fig:batch_fig3_diagnostics}A): first, we see a strong clustering of samples by mass spectrometry batch; second, replicates tend to be close, although they are not necessarily the samples with the smallest distance to each other. Each factor, however, needs a separate plot, and the figures, illustrating the influence of such factors as digestion batch, diet or acquisition date can be found in \textcolor{red}{Supplementary Fig3A}.
+ 
+Hierarchical clustering in contrast, allows to visualize multiple factors at once (Figure~\ref{fig:batch_fig3_diagnostics}B). In principle, it shows information, similar to that of PCA: batch factors, primarily MS batch and digestion batch cluster together, while the effect of diet, the biological factor, is not as strong. Similarly, in PanCancer study (Figure \ref{fig:batch_figS2_PanCancer}\textcolor{red}{E and F\textbf{TODO: swap with hierarchical}}), we see that the digestion batch is the key factor, determining, which samples cluster together.
+
+Principal Variance Components Analysis (PVCA) transforms the intuition of visualization brought about by PCA and Hierarchical Clustering into numbers: the weights of each factor in each Principal Component are combined, thus providing a concise summary of variance distribution between biological and technical factors and their combination. Thus, for Aging Mice dataset we see in Figure~\ref{fig:batch_fig3_diagnostics}C, that technical factors such as MS batch, digestion batch and their combination are leading drivers of variance, while biological factors, such as Diet, Sex and Age are much less prominent in the data. It should be noted, that substantial fraction of variance is “residual”, or cannot be explained by annotated sample characteristics.
+
+One should note, however, that most proteome-wide diagnostics rely on data matrices without missing values, so typically for PCA or hierarchal clustering the missing values are filled with zeros, small random numbers etc. Since missing values are often batch-specific, this might lead to overestimate of the batch-related clustering. For more details on the effect of missing values, please refer to \hyperref[box:Box3_missingness]{Box 3 “Missing values”}.
+
+In addition to proteome-wide diagnostics, it is highly advisable to a few individual features to control for the feature-level bias. Spike-in peptides and proteins are particularly handy for this type of diagnostics. In Aging Mice data we picked iRT peptides, that were spiked in the same quantities. In Figure~\ref{fig:batch_fig3_diagnostics}D, one can see, that despite the correction batch-specific bias affects the signal. Moreover, this bias is order-related and manifests differently for each of the peptides (for example, in samples \textcolor{red}{125 – 206}). In PanCancer, other type of peptides is used for control: there, we see that the peptides of spiked-in Bovine proteins Fetuin B and Albumin, are quantified differently in each batch (Figure \ref{fig:batch_figS2_PanCancer} \textcolor{red}{C and D \textbf{TODO: swap with hierarchical}}). There is no order-related drift, but each batch mean is clearly shifted. Thus, feature-level bias can be very different in each dataset, but checking several representative peptides is valuable to understand the nature of bias in each case.
+
+Together, proteome-level and feature-level diagnostics guide the choice of batch correction procedure.
+
+
 \subsection{Batch effects correction}
+The goal of batch effects correction is to alleviate the bias, that remained after normalization. In most cases, normalization significantly reduces the unwanted variance (see representative peptides in Supplementary Fig. 3C), and, as in InterLab study, the normalization alone might be the only adjustment step. However, in many cases, different features manifest batch effects differently, as seen in Fig.3D and SuppFig.2E. Thus, batch effects correction typically is a feature-level correction.
+Feature-level bias in proteomics can be of various nature: in Aging Mice data, the peptides have order-specific, continuous, bias, while PanCancer data has more common discrete shift. 
+The signal drift, as seen in Aging Mouse data, is characteristic of particularly large datasets: current generation of mass-spectrometers can typically measure consistently around 70-100 samples, but the cases when the machine can run non-stop for 150 or more samples are rare. Thus, Aging Mice, comprised of almost 400 samples, had to be split into 7 mass-spectrometry batches, with unique signal drifting pattern within it.
+To address this complex bias that includes, signal drift problem, we have developed a two-step batch correction procedure shown in Fig4.
+The first step, correcting MS signal drift is based on non-linear curve fitting. As a curve-fitting algorithm, we have chosen LOESS, as it combines computational simplicity with relative flexibility of the fit characteristics. In principle the procedure runs as follows: for each peptide and each batch, a unique curve is fitted (Fig.4A), then subtracted from the normalized intensity value in each sample, leading to measurements, whose median is different in each batch (Fig 4B). At this stage the batch effects can be treated as discrete and thus discrete batch effects correction procedure can be applied. Discrete batch effects are a known problem in genomics field and thus the methods, such as median centering, ComBat and others can in principle be applied from this step on. One of the main limitation of porting the methods could be a substantial fraction of missing values, for more details on missing value problem see Box 3 “Missing Values”.
+To correct for discrete effects, in Aging Mice data we choose median centering, as most of the bias at this point can be corrected by a simple shift of the median, leading to much smoother measurements (Fig. 4C). The same procedure has been applied to PanCancer study. 
+When several batch factors affect the data (as diagnosed by PCA, Hierarchical clustering and/or PVCA), all factors should be accounted for during correction. This typically means that batch factors get combined, as schematically is shown in Fig.5. In Aging Mice study, there were also two factors: MS batch and digestion batch. These factors, however, were highly confounded, and, when combined, certain batches would only be composed of (X, Y, Z) samples. Thus, it was decided to correct for MS batch only.
+Thus, batch effect correction removes variance from known, annotated, batch factors. Whether the adjustment procedures – normalization and batch effects correction – improve the data signal, has to be determined by quality control.
+
 
 \subsection{Quality Control}
 
