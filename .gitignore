@@ -1,2 +1,9 @@
-main.pdf
+batch_effects_paper.pdf
 citations/*
+*.aux
+*.bbl
+*.blg
+*.out
+*.log
+*.synctex.gz
+.DS_store

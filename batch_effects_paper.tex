@@ -142,6 +142,7 @@ It is also important to stress that batch factors should be considered in the ex
  
 In the accompanying “proBatch” package we implemented several methods with proven utility in batch effects analysis and adjustment. We also provide tips for integrating other tools that might be useful in this context, we provide tips for making them compatible. Extensive comparison of various methods has been published previously \cite{Chawade:2014aa, Luo2010} and here we summarize the best practices from these papers, as well as reviews \cite{Lazar:2013aa, Leek:2010aa}  and application papers \cite{Sajic2018, Collins2017}, and turn them into principles that can guide the reader in choosing an appropriate methodology. 
 
+
 \begin{figure}[bt]
 	\center
 	\includegraphics[width=6cm]{figures/Fig0_workflow_staircase}
@@ -154,14 +155,15 @@ In the accompanying “proBatch” package we implemented several methods with p
 
 \subsection{Data matrix before adjustment: choosing between protein-, peptide- and fragment-level}
 
+
 This workflow starts with a raw data matrix, for which initial steps, such as peptide-spectrum matching, quantification, and FDR control have been completed. Data are assumed to be log-transformed, unless the variance stabilizing transformation \cite{Durbin2002} is used. In latter case, the data transformation is included into the normalization procedure. 
 
 We suggest to perform batch affect adjustment on peptide or fragment ion level, as this procedure alters feature abundances that are critical for protein quantity inference \cite{Clough:2012aa, Teo:2015aa}.  
 
+
 We also suggest that all detected peptides, including non-proteotypic and ones with missed cleavages, should be kept into consideration during batch effects adjustment. Keeping all measurements allows to better evaluate the intensity distribution within each sample, which is critical for subsequent normalization and correction steps.
 
 \subsection{Initial assessment}
-
 The goals of the initial assessment phase are to determine bias magnitude, sources and selection of a normalization method.
 
 In most cases, the intensity distributions of samples are different from each other. Comparing global quantitative properties such as sample medians or standard deviations helps with the choice of normalization methods and the identification of technical factors requiring further control. 
@@ -264,6 +266,7 @@ More commonly batch effects are discrete and manifest as feature-specific shifts
 The purpose of the quality control step is to determine whether the adjustment procedures – normalization and/or batch effects correction – have improved the data. At this step, the data after adjustment are compared to the raw data matrix.
 
 There are two types of criteria to evaluate the data quality: 1) Removal of the bias (negative control); 2) Improvement of the data (positive control).
+
 
 Typically, bias is considered to be removed, if diagnostic plots indicate that similarity between samples is not driven by technical factors anymore. This means that neither hierarchical clustering nor PCA show clustering by batch, and correlation of samples from the same batch is no longer stronger than correlation of unrelated samples. Also, individual features should not show batch-related biases. Thus, comparison of diagnostic plots for raw and adjusted data serves as the negative control.
 
@@ -415,6 +418,7 @@ Together, proteome-level and feature-level diagnostics guide the choice of appro
 		Much more importantly, imputed values may also bias the analysis past the batch effect adjustment stage. As shown in Fig ~\ref{fig:batch_fig4_missing_values}B and C, if "requant" values are used, the correlation within batches seems higher than the correlation of replicates, while this problem is not observed when imputation is not used "no requants". Protein inference is also affected by the imputation on lower levels.
 		
 		Finally, provided that there are enough confidently quantified values, many downstream analysis techniques, such as differential expression or protein correlation analyses, can handle missing values. We therefore, advise avoiding imputation, or at least performing it after batch correction whenever possible. 
+
 		
 		\begin{minipage}[h]{\linewidth}
 			%\center
@@ -438,6 +442,7 @@ Together, proteome-level and feature-level diagnostics guide the choice of appro
 		(A) Fitting a LOESS curve for every peptide in each batch and subtracting the fit; (B) Using medians for correction of the residual discrete batch effect; (C) The corrected data is more uniform and can now be used for downstream analysis. Data from the Aging mouse study.}
 	\label{fig:batch_fig5_batchCorrection}
 \end{figure}
+
 The goal of batch effects correction is to alleviate the residual bias after normalization. In most cases, normalization significantly reduces the unwanted variance (see representative peptides in \textcolor{red}{Supplementary Fig. 3C}), and, as in the InterLab study, might sometimes be the only required adjustment. However, in many cases the batch effects diagnostic procedures described in the previous section will reveal that individual features are differentially affected by batch effects even after normalization (Figure~\ref{fig:batch_fig3_diagnostics}D and Figure~\ref{fig:batch_figS2_PanCancer}C). Indeed, batch effects correction is typically applied at the feature-level.
 
 Feature-level bias in proteomics can be of various nature. In the Aging mouse data, the peptides manifest an order-specific, continuous bias, while the PanCancer data exhibits discrete shifts. The latter can be corrected with methods established by the genomics community, whereas the former is typical of large MS-based proteomic experiments and will therefore be discussed in more details in the following paragraphs.
@@ -462,6 +467,7 @@ In conclusion, batch effect correction removes variance from known, annotated ba
 	\label{fig:batch_fig6_QualityControl}
 \end{figure}
 
+
 The main goal of the quality control step is to determine, whether the data quality has improved. There are two types of quality controls. Negative controls, signify that biases, detected during the initial assessment or diagnostic steps are no longer affecting the data. Positive controls indicate that the data quality has improved. Certain quality controls are a mixture of both types.
 
 Examples of negative controls are the plots discussed in the diagnostics section like individual peptides plots, PCA, hierarchical clustering or PVCA. In most cases, these show that samples are no longer affected by batch-specific patterns (e.g. PanCancer study corrected Bovine peptides in Figure~\ref{fig:batch_figS2_PanCancer}E and F and hierarchical clustering in Figure~\ref{fig:batch_figS2_PanCancer}C and D).
@@ -473,6 +479,7 @@ Generally speaking, clustering or PVCA, are valuable as negative controls. Howev
 Depending on the experimental setup, one can sometimes judge the data improvement through the presence of better biological signal. In the Aging mouse study, this can be achieved via known Quantitatative Trait Loci (QTL), particularly cis-QTLs (i.e. alleles of specific genes  affecting protein expression). As seen in Figure~\ref{fig:batch_fig6_QualityControl}A, certain proteins become clearly easier to separate and less biased than before the bias adjustment (compare to Figure~\ref{fig:batch_fig2_initAssessment}C). In addition to \textcolor{red}{XYZ} QTLs detectable in the raw data, an additional \textcolor{red}{ABC} alleles pass the significance threshold after normalization and a further \textcolor{red}{DEF} after batch correction. This essentially indicates that most of the batch effects are adjusted for at the normalization step, supporting the choice of normalization to be the only batch adjustment step.
 
 Next we propose two positive control approaches, that can be used in almost any proteomic experimental context.
+
 
 The first method is based on assessing sample proximity (proximity is commonly measured as correlation). 
 Two comparisons are particularly important: 1) the comparison of correlation distributions for intrabatch and unrelated samples, which should be similar in unbiased data; 2) the comparison of correlation distributions for replicates and all other samples, which should be clearly skewed in favour of the replicates in unbiased data. Note that although individual replicates might have lower correlation than unrelated samples, as a distribution, replicate correlation has to be stronger. In the Aging mouse dataset these two comparisons can be seen pre- and post-adjustment in Figure~\ref{fig:batch_fig2_initAssessment}B and Figure~\ref{fig:batch_fig6_QualityControl}B. This approach and considerations can also be applied with different distance measures and visualizations. Figure~\ref{fig:batch_figS2_PanCancer}G and H demonstrate this concept on the PanCancer data using Manhattan distance and a hierarchical clustering representation. These, proximity-based quality controls are universally  applicable to any dataset with replicated samples and batches.
