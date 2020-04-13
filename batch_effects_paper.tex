@@ -27,6 +27,7 @@
 \usepackage[font=small,format=plain,labelfont=bf,textfont=normal, justification=justified,singlelinecheck=false]{caption}
 \usepackage{capt-of}
 \usepackage{afterpage}
+\usepackage{hyperref}
 
 \newcommand{\squishlist}{%
 	\begin{list}{-}%
@@ -46,6 +47,16 @@
 	\setcounter{figure}{0}
 	\renewcommand{\thefigure}{S\arabic{figure}}%
 }
+
+\hypersetup{%
+  colorlinks=true,% hyperlinks will be coloured
+  linkcolor=blue,% hyperlink text will be green
+  pdfborderstyle={0 1 1},% hyperlink border will be red
+  urlcolor = blue,
+  urlbordercolor	= {0 1 1},
+  citecolor = black
+}
+
 
 % Update article type if known
 \papertype{Original Article or Review?}
@@ -106,13 +117,13 @@ We supplement the description with the code, required to reproduce it on new dat
 
 Recent advances in proteomics based on mass spectrometry (MS) approaches have significantly increased sample throughput and quantitative reproducibility to a degree that large-scale studies consisting of hundreds of samples are becoming routine \cite{Williams:2016aa, Liu2015, Sajic2018, Okada2016, Collins2017}. This makes mass spectrometry (MS) a method of choice to study of physiological processes and diseases, as proteins constitute a large part of the molecular machinery and carry out cellular functions through coordinated activity of protein complexes and molecular pathways  \cite{Schubert2017}. Promising as it is, mass spectrometry derived quantitative measurements on thousands of proteins, can be affected by minuscule differences in sample preparation and data acquisition conditions, such as different technicians, reagent batches or changes in instrumentation. This phenomenon, known as “batch effects” introduces cumulative error that reduces the statistical power to detect true biological signal. In the most severe cases, the biological signal ends up correlating with technical variables, leading to concerns about the validity of the biological conclusions \cite{Leek:2010aa, Akey:2007aa, Baggerly:2004aa, Petricoin:2002aa}.
 
-Despite many publications on the topic of batch effects, both from genomics community, that had made major contributions to the problem about a decade ago \cite{Leek:2010aa, Lazar:2013aa, Luo2010, Chen:2011ac, Dillies:2013aa, Chawade:2014aa}, and proteomic community, which has faced the issue quite recently \cite{Karpievitch2012, Chawade:2014aa, Valikangas2018, Gregori2012}, the way the problem of batch effects should be approached, is still a hot research topic. Despite extensive reviews on the topic, \cite{Lazar:2013aa, Leek:2010aa}, there is confusion even in the basic terminology: for example, the distinction between normalization, batch effects correction and batch effects adjustments is not always clear and the terms are often used interchangeably. Thus, we compiled a short glossary, found in \hyperref[box:Box1_definitions]{Box 1 "Terminology"}. 
+Despite many publications on the topic of batch effects, both from genomics community, that had made major contributions to the problem about a decade ago \cite{Leek:2010aa, Lazar:2013aa, Luo2010, Chen:2011ac, Dillies:2013aa, Chawade:2014aa}, and proteomic community, which has faced the issue quite recently \cite{Karpievitch2012, Chawade:2014aa, Valikangas2018, Gregori2012}, the way the problem of batch effects should be approached, is still a hot research topic. Despite extensive reviews on the topic, \cite{Lazar:2013aa, Leek:2010aa}, there is confusion even in the basic terminology: for example, the distinction between normalization, batch effects correction and batch effects adjustments is not always clear and the terms are often used interchangeably. Thus, we compiled a short glossary, found in \textbf{\hyperref[box:Box1_definitions]{Box 1 "Terminology"}}. 
 
 There is also a lot of debate, which method performs best, and multiple articles, comparing various methods, have been published \cite{Luo2010, Chen:2011ac, Chawade:2014aa}. Other publications advise to check the assumptions about the data before selecting the bias adjustment method \cite{Evans:2018aa, GOH2017498}. 
 
 Also, each technology has its own issues: RNA-seq batch effects adjustment requires its own approaches\cite{Dillies:2013aa} that address sequencing-specific problems. Similarly, mass spectrometry methods in proteomics  (e.g. Data Dependent Acquisition - DDA, Data Independent Acquisition - DIA, and Tandem Mass Tag - TMT) also present a number of field-specific challenges. First, there is the problem of peptide to protein inference \cite{Clough:2012aa, Teo:2015aa, Rosenberger2014a, Choi2014, Muntel:2019aa}. As protein quantities are inferred from the quantities of measured peptides or even fragment ions, one needs to decide at which level to correct the data. Second, it is known that missing values in mass spectrometry are often associated with technical factors \cite{Karpievitch2012, Matafora2017}. Finally, when dealing with long experiments with large sample numbers, typically in the order of hundred or more, one needs to account for MS signal drift. 
 
-In this manuscript, we discuss application of established approaches for batch effect adjustment, techniques, that, in our view, are unjustly rarely used in the process of adjustment, and comment on various MS-specific challenges. We start by providing a brief overview of the workflow and definition of key terms for each step. In addition to considering assessment and adjustment of batch effects, we summarize the best practices for measuring improvements in data quality post-correction. We also devote a section to the implications of missing values in relation to batch effects and potential pitfalls related to their imputation. We finish the manuscript with a discussion on the generalizability and future perspective of the presented approaches. To facilitate the application to practical use-cases, we illustrate all relevant steps using three large-scale SWATH-MS studies. For these "case studies", we primarily rely on the largest of the three datasets (i.e.: the Aging Mice Study), and refer to other two where appropriate. However, the presented protocols are generic and also applicable to other MS-based proteomic workflows. Importantly, we also make available the \href{https://bioconductor.org/packages/release/bioc/html/proBatch.html}{proBatch} Bioconductor package , as well as a github  \href{https://github.com/symbioticMe/batch_effects_workflow_code}{repository} with all code and data required to reproduce the case study analyses.
+In this manuscript, we discuss application of established approaches for batch effect adjustment, techniques, that, in our view, are unjustly rarely used in the process of adjustment, and comment on various MS-specific challenges. We start by providing a brief overview of the workflow and definition of key terms for each step. In addition to considering assessment and adjustment of batch effects, we summarize the best practices for measuring improvements in data quality post-correction. We also devote a section to the implications of missing values in relation to batch effects and potential pitfalls related to their imputation. We finish the manuscript with a discussion on the generalizability and future perspective of the presented approaches. To facilitate the application to practical use-cases, we illustrate all relevant steps using three large-scale SWATH-MS studies. For these "case studies", we primarily rely on the largest of the three datasets (i.e.: the Aging Mice Study), and refer to other two where appropriate. However, the presented protocols are generic and also applicable to other MS-based proteomic workflows. Importantly, we also make available the \underline{\href{https://bioconductor.org/packages/release/bioc/html/proBatch.html}{proBatch}} Bioconductor package , as well as a GitHub  \underline{\href{https://github.com/symbioticMe/batch_effects_workflow_code}{repository}} with all code and data required to reproduce the case study analyses.
 
 
 \begin{table}[ht]
@@ -125,7 +136,7 @@ In this manuscript, we discuss application of established approaches for batch e
 		Batch effects & Systematic differences between the measurements due to technical factors, such as sample or reagent batches.  \\
 		Batch effects adjustment & Procedure of data transformation that \textbf{adjusts for batch effects and other technical differences between samples}. The fundamental objective of the batch effect adjustment is to make all samples comparable for a meaningful biological analysis. \\
 		Normalization & \textbf{Adjustment of global sample properties} (e.g. means, medians) to facilitate meaningful comparison. \\
-		Batch effects correction & Data analysis technique that \textbf{corrects quantities of specific features} (genes, peptides, metabolites), to make them comparable. This step is often called "batch effects removal" or "batch effects adjustment" \\
+		Batch effects correction & Data analysis technique that \textbf{corrects quantities of specific features} (genes, peptides, metabolites), to make them comparable. This step is often called "batch effects removal" or "batch effects adjustment", note the difference in the definition used here. \\
 		\hline  % Please only put a hline at the end of the table
 	\end{tabular}
 	
@@ -134,9 +145,9 @@ In this manuscript, we discuss application of established approaches for batch e
 
 \section{Addressing batch effects: the workflow}
 
-The purpose of this article is to guide researchers working with large-scale proteomic datasets, towards minimizing bias and maximizing robustness and reproducibility of results generated from such data. The workflow starts from quantified spectra, here referred to as “raw data matrix” and finishes with "batch-adjusted" data, which are ready for downstream analysis (e.g. differential expression or network inference). We split the workflow in five steps, shown in Figure~\ref{fig:batch_fig1_workflow}, and describe each of them in the following paragraphs. In the context of this manuscript, we will use the term “adjust for batch effects” when referring to the whole workflow, and “correct for batch effects” when referring to the correction of normalized data. These and other terms will be used as defined in \hyperref[box:Box1_definitions]{Box 1 "Terminology"}. 
+The purpose of this article is to guide researchers working with large-scale proteomic datasets, towards minimizing bias and maximizing robustness and reproducibility of results generated from such data. The workflow starts from quantified spectra, here referred to as “raw data matrix” and finishes with "batch-adjusted" data, which are ready for downstream analysis (e.g. differential expression or network inference). We split the workflow in five steps, shown in Figure~\ref{fig:batch_fig1_workflow}, and describe each of them in the following paragraphs. In the context of this manuscript, we will use the term “adjust for batch effects” when referring to the whole workflow, and “correct for batch effects” when referring to the correction of normalized data. These and other terms will be used as defined in \textbf{\hyperref[box:Box1_definitions]{Box 1 "Terminology"}}. 
 
-We provide a checklist that summarizes the most important points of the protocol in \hyperref[box:Box2_checklist]{Box 2 "Batch effects processing checklist"}.
+We provide a checklist that summarizes the most important points of the protocol in \textbf{\hyperref[box:Box2_checklist]{Box 2 "Batch effects processing checklist"}}.
 
 It is also important to stress that batch factors should be considered in the experimental design phase, to ensure that the data are not biased beyond repair  \cite{Hu2005, Gilad2015}. However, experimental design is outside the scope of this article and we refer the reader to previously published materials on the topic \cite{Oberg2009, Cuklina2020}.
  
@@ -257,7 +268,7 @@ Another reason to check individual peptides in proteomics is to examine the tren
 
 Diagnostics helps to determine, whether batch effects correction is needed. As global sample patterns have already been corrected during normalization, batch effects affect specific features and feature groups, and that’s the level on which they need to be corrected.
 
-If batch effects are continuous, i.e. manifest as MS signal drift, an order-specific curve needs to be fitted. Such drifts are more likely to occur in studies profiling hundreds of samples. Since this is a problem that is specific to mass spectrometry and is still relatively new for the community, we propose a solutions for it in  \textcolor{red}{Box 4 “Correcting MS signal drift”}.
+If batch effects are continuous, i.e. manifest as MS signal drift, an order-specific curve needs to be fitted. Such drifts are more likely to occur in studies profiling hundreds of samples. This is a problem that is specific to mass spectrometry and is still relatively new for the community. This problem can be solved by fitting a curve, such as LOESS fit or using any other continuous algorithm.
 
 More commonly batch effects are discrete and manifest as feature-specific shifts of each batch. For these cases, methods such as mean and median centering work very well. A more advanced modification of the mean shift is provided by ComBat \cite{Johnson:2007aa}, that uses a Bayesian framework, which has been successfully applied to proteomic data \cite{Lee:2019aa}. However, this requires that all features are represented in each of the batches. Therefore, especially in large-scale proteomic datasets, applying ComBat might require removal of  a substantial number of peptides, (see \hyperref[box:Box3_missingness]{Box 3 “Missing values”} for details).
 
@@ -491,31 +502,30 @@ In summary, through a combination of positive and negative quality controls, it 
 
 \section{Computational tools and analysis}
 
-To facilitate the practical application of the steps and principles described in this manuscript, we have developed an R package, named "proBatch" and made it available in Bioconductor (https://bioconductor.org/packages/release/bioc/html/proBatch.html). The "proBatch" package wraps multiple established techniques for data transformation and visualization with proven utility in control of batch effects. 
+To facilitate the practical application of the steps and principles described in this manuscript, we have developed an R package, named "proBatch" and made it available in Bioconductor \url{https://bioconductor.org/packages/release/bioc/html/proBatch.html}. The "proBatch" package wraps multiple established techniques for data transformation and visualization with proven utility in control of batch effects. 
 
 The package has been designed based on the following principles to facilitate the construction of batch effect adjustment pipelines:
-
 \begin{itemize}
     \item For each step of the workflow one or more functions are provided.
-    \item The input to each function is standardized to a feature measurement table (e.g. peptide, protein, fragment, transition) and an annotation table with technical and biological factors.
-    \item Consistent visual representation of factors at all steps of the analysis.
+    \item The input to each function is standardized to a feature measurement table (e.g. peptide, protein, fragment, transition) and a sample annotation table with technical and biological factors.
+    \item Consistent visual representation of factors at all steps of the analysis (e.g. color scheme defined once per analysis).
 \end{itemize}
 
 Note that we have also deliberately avoided the inclusion of "single-click" batch adjustment function, that would combine normalization and correction. We decided on this implementation to promote awareness of the properties of a particular dataset and to enable informed choice of appropriate batch adjustment methods.
 
-We also make the code used for the analyses of the three case studies presented in this manuscript available on Github (https://github.com/symbioticMe/batch_effects_workflow_code). An accompanying docker container containing all the tools required to replicate the analyses is made available on Dockerhub (ADD_LINK).
+We also make the code used for the analyses of the three case studies presented in this manuscript available on Github \url{https://github.com/symbioticMe/batch\_effects\_workflow\_code}. An accompanying docker container containing all the tools required to replicate the analyses is made available on Dockerhub (\textcolor{red}{Patrick: ADD\_LINK}).
 
 \section{Discussion}
 
 Large-scale proteomic studies, enabled by recent technological advances, unleashed the statistical power required for systems biology and translational medicine studies. However, great power comes with batch effects baggage. 
 
-It is sometimes argued, that batch effects should not be corrected, but rather incorporated into the downstream analysis. For example, one way to account for batch effects in differential expression analysis using ANOVA is to use the batch as one of multiple factors affecting protein abundance. This approach is backed up with decades of statistical research and practice, but has a few practical downsides. First, for quantification methods, based on within-protein peptide correlation, unadjusted batch effects can compromise quantification via spurious peptide correlations. Second, incorporating batch effects in downstream analyses is not always straightforward (e.g. correlation network inference). This explains, why most large-scale studies opt for correcting batch effects and proceed with a “batch-free” dataset.
+It is sometimes argued, that batch effects should not be corrected, but rather incorporated into the downstream analysis. For example, one way to account for batch effects in differential expression analysis using ANOVA is to use the batch as one of multiple factors affecting protein abundance. This approach is backed up with decades of statistical research and practice, but has a few practical downsides. First, for quantification methods, based on within-protein peptide correlation \cite{Teo:2015aa}, unadjusted batch effects can compromise quantification via spurious peptide correlations. Second, incorporating batch effects in downstream analyses is not always straightforward (e.g. correlation network inference). This explains, why most large-scale studies opt for correcting batch effects and proceed with a “batch-free” dataset.
 
 Another common advice regarding batch effects is to not correct them to avoid “flattening” of the signal. Typically, when significant hits disappear after batch correction, the biological groups were confounded with the batch factors. This is a serious experimental design error and can be prevented by balancing the biological groups between the expected batches. On the other hand, to account for hill defined batches (e.g. MS-batches) samples can be randomized.
 
 Most methods for the identification and correction of batch effects in MS-based proteomics data can be borrowed from the genomics field. However, missing values represent a key distinction between the technologies. These are often batch-associated and can cause established clustering and correction methods to fail. For example, missing values often lead to “uncorrectable” batch effects seen as batch clusters in PCA. This, however, is often due to filling the batch-specific missing values with zeros or small random numbers. Other methods, such as hierarchical clustering or ComBat \cite{Johnston2005a}, could potentially be adapted to account for the sparsity of proteomics data. Even so, proteomics, could benefit from the development of more methods robust against data missingness.
 
-Specialized proteomics applications could also benefit from further batch adjustment methodological developments. In this manuscript we presented a workflow designed with DIA data in mind, due to its reproducibility and quantitative robustness in a large sample size setting \cite{Collins2017}. Since the workflow relies on having a quantitative data matrix with few assumptions on its structure, it is in principle also applicable to other quantitative proteomics workflows (e.g. TMT, label free, ...). However, proteomics applications incorporating affinity purification, size exclusion chromatography, PTM-centric protocols or subcellular fractionation are typically more heterogeneous. These dataset types will require additional efforts for batch effects characterization and correction.
+Specialized proteomics applications could also benefit from further batch adjustment methodological developments. In this manuscript we presented a workflow designed with DIA data in mind, due to its reproducibility and quantitative robustness in a large sample size setting \cite{Collins2017}. Since the workflow relies on having a quantitative data matrix with few assumptions on its structure, it is in principle also applicable to other quantitative proteomics workflows (e.g. TMT, label free). However, proteomics applications incorporating affinity purification, size exclusion chromatography, PTM-centric protocols or subcellular fractionation are typically more heterogeneous. These dataset types will require additional efforts for batch effects characterization and correction.
 
 In conclusion, mass spectrometry based proteomics has come a long way, and is still continuing to evolve. As throughput and reproducibility increase, so do batch effects-related issues. Hence, we expect experimental design and batch effects correction methods to also grow in importance and to take center stage in  large scale proteomics applications such as clinical proteomics and systems biology.
 
@@ -540,7 +550,7 @@ Authors declare no conflict of interests
 % Submissions are not required to reflect the precise reference formatting of the journal (use of italics, bold etc.), however it is important that all key elements of each reference are included.
 \bibliography{batch_references}
 
-\graphicalabstract{example-image}{Please check the journal's author guidelines for whether a graphical abstract, key points, new findings, or other items are required for display in the Table of Contents.}
+\graphicalabstract{example-image}{\textcolor{red}{To be discussed, whether to go for it.}}
 
 \newpage
 \section{Supplementary Material}
