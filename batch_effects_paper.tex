@@ -57,7 +57,7 @@
 % Include full author names and degrees, when required by the journal.
 % Use the \authfn to add symbols for additional footnotes and present addresses, if any. Usually start with 1 for notes about author contributions; then continuing with 2 etc if any author has a different present address.
 \author[1, 2, 3]{Jelena Čuklina}
-\author[1]{Chloe Lee}
+\author[1]{Chloe H. Lee}
 \author[1]{Evan G. Williams}
 \author[1]{Tatjana Sajic}
 \author[1\authfn{2}]{Ben C. Collins}
@@ -77,7 +77,7 @@
 \corraddress{Ruedi Aebersold, Institute of Molecular Systems Biology, ETH Zurich, Zurich, CH-8093, Switzerland}
 \corremail{aebersold@imsb.biol.ethz.ch}
 
-\presentadd[\authfn{2}]{Department, Institution, City, State or Province, Postal Code, Country}
+%\presentadd[\authfn{2}]{Department, Institution, City, State or Province, Postal Code, Country}
 
 \fundinginfo{J.Č. was supported by funding from the European Union Horizon 2020 research and innovation program under grant agreement No 668858 and the Swiss State Secretariat for Education, Research and Innovation (SERI) under contract number 15.0324-2. P.P. was supported by SNF grant no. SNF IZLRZ3\_163911.}
 
@@ -95,7 +95,7 @@ Advances in mass spectrometry-based proteomics have significantly increased samp
 Here, we present a step-by-step workflow for batch effects analysis in proteomics. This workflow allows one to assess batch effects in a given dataset, to select appropriate methods for their adjustment and to evaluate the quality of this adjustment. We discuss solutions to general as well as to MS-specific batch effects, such as correction of MS signal drift and batch-associated missing values.
 
 We illustrate the application of the workflow on three large-scale DIA proteomics datasets. However, the principles here described can be generalized to other proteomic methods. The code, accompanying the analysis, is also available.
-We supplement the description with the code, required to reproduce it on new datasets.
+We supplement the description with the code, required to reproduce it on new datasets. [162 words]
 }
 
 
@@ -394,7 +394,7 @@ Normalization harmonizes overall sample intensities, however, batch effects can 
 Various methods can be used to assess the extent of remaining bias in the data. Most of them characterize the dataset as a whole, thus working on proteome level. Methods like Principal Components Analysis (PCA) and Hierarchical Clustering are the most established. They allow to visualize the factors underlying the similarity of the samples.
 Principal Component Analysis is a method that transforms the data matrix into a linear combination of “components” representing the directions of highest variance in the data. This allows high-dimensional data to be visualized in lower dimensions. Additional coloring of the samples by technical/biological factors or by highlighting replicates facilitate the interpretation of what drives sample proximity. For instance, in the Aging mouse study, the following patterns become apparent (see Figure~\ref{fig:batch_fig3_diagnostics}A): first, we see a strong clustering of samples by mass spectrometry batch; second, while replicates tend to be close, they are not necessarily the samples with the smallest distance to each other. An overlaid visualization of other factors, such as digestion batch, diet or acquisition date can be found in \textcolor{red}{Supplementary Fig3A}.
  
-Hierarchical clustering in contrast, allows one to visualize multiple factors at once (Figure~\ref{fig:batch_fig3_diagnostics}B). Overall, the same patterns identified in the PCA plots are confirmed: clustering is driven primarily by MS and digestion batch, while the effect of diet, the biological factor, is not as strong. Similarly, in the PanCancer study (Figure \ref{fig:batch_figS2_PanCancer} {top parts of E and F}), we see that the digestion batch is the key clustering factor.
+Hierarchical clustering in contrast, allows one to visualize multiple factors at once (Figure~\ref{fig:batch_fig3_diagnostics}B). Overall, the same patterns identified in the PCA plots are confirmed: clustering is driven primarily by MS and digestion batch, while the effect of diet, the biological factor, is not as strong. Similarly, in the PanCancer study (Figure \ref{fig:batch_figS2_PanCancer} {E and F, top parts}), we see that the digestion batch is the key clustering factor.
 
 Principal Variance Components Analysis (PVCA) transforms the intuition of visualization brought about by PCA and Hierarchical Clustering into numbers. The weights of each factor in each Principal Component are combined, thus providing a concise summary of variance distribution between biological and technical factors and their combination. In the Aging mouse dataset we see in Figure~\ref{fig:batch_fig3_diagnostics}C, that technical factors such as MS batch, digestion batch and their combination are leading drivers of variance. Whereas biological factors, such as Diet, Sex and Age are much less prominent. It should be noted, that a substantial fraction of variance is “residual”, and cannot be explained by the annotated sample characteristics.
 
@@ -408,12 +408,12 @@ Together, proteome-level and feature-level diagnostics guide the choice of appro
 	\begin{tcolorbox}
 		\section*{Box 3: Missing values}
 		\label{box:Box3_missingness}
-		Proteomics experiments now routinely profiles hundreds or thousands of proteins. However, detecting all proteins without missing values across hundreds of samples is not yet feasible. The patterns of "missingness" are known to be batch-specific \cite{Karpievitch2012}, which is also true for the Aging mouse data (see Figure~\ref{fig:batch_fig4_missing_values} \textcolor{red}{\textbf{\hl{and Supp Fig X}}} for details).
+		Proteomics experiments now routinely profiles hundreds or thousands of proteins. However, detecting all proteins without missing values across hundreds of samples is not yet feasible. The patterns of "missingness" are known to be batch-specific \cite{Karpievitch2012}, which is also true for the Aging mouse data (see Figure~\ref{fig:batch_fig4_missing_values} and Figure ~\ref{fig:batch_figS4_missing_values} for details).
 		
 		It should be noted, that although "missingness" among low-abundant proteins and peptides is more common, this problem can arise due to peptide interference regardless of their abundance. 
         Missing values can also affect batch effects correction methodologies. For instance the current implementation of ComBat \cite{Johnson:2007aa} does not work if a peptide is missing in one batch. One possible solution is to remove all peptides with missing values before the batch correction \cite{Lee:2019aa}. However, this leads to the loss of potentially valuable quantitative data. Thus, methods which are more robust to missing data, such as median-centering, can sometimes be better suited for proteomic data.
 		
-		Missing values are often imputed, by filling them with zeros, random small values \cite{Tyanova:2016aa} or re-quantification of elution traces \cite{Rost2016}. Such imputation, however, can introduce bias that is batch- or peptide-specific, as seen in  \textcolor{red}{\textbf{\hl{(Supp Fig Xa)}}}. In turn, this skews batch effect diagnostic methods, such as hierarchical clustering, PCA or PVCA. In these cases, batch effects will be overestimated, as the clustering pattern will be driven by missing values Fig~\ref{fig:batch_fig4_missing_values}A. One can estimate this effect by varying the fraction of missing values and assessing to what extent the batch effects are driven by consistently quantified peptides vs missing ones \textcolor{red}{\textbf{\hl{Supp Fig Xb}}}.
+		Missing values are often imputed, by filling them with zeros, random small values \cite{Tyanova:2016aa} or re-quantification of elution traces \cite{Rost2016}. Such imputation, however, can introduce bias that is batch- or peptide-specific, as seen in  Figure ~\ref{fig:batch_figS4_missing_values}A. In turn, this skews batch effect diagnostic methods, such as hierarchical clustering, PCA or PVCA. In these cases, batch effects will be biased, and sometimes the clustering pattern will be driven by missing values Fig~\ref{fig:batch_fig4_missing_values}A. One can estimate this effect by varying the fraction of missing values and assessing to what extent the batch effects are driven by consistently quantified peptides vs missing ones Figure ~\ref{fig:batch_figS4_missing_values}B.
 		
 		Much more importantly, imputed values may also bias the analysis past the batch effect adjustment stage. As shown in Fig ~\ref{fig:batch_fig4_missing_values}B and C, if "requant" values are used, the correlation within batches seems higher than the correlation of replicates, while this problem is not observed when imputation is not used "no requants". Protein inference is also affected by the imputation on lower levels.
 		
@@ -563,5 +563,13 @@ Authors declare no conflict of interests
 	\label{fig:batch_figS2_PanCancer}
 \end{figure}
 
+\begin{figure}
+	%\center
+	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer}
+	
+	\caption{\textbf{Missing values and batch effects} \\
+		\footnotesize (A) Re-quantification of elution traces can pick up batch-specific noise, that can be drastically different from confidently identified peptide fragments (left) or indistinguishable from those, meaning that values inferred should be treated with extreme caution; (B) PVCA can only be applied to complete matrices and thus missing values need to be inferred. This makes this method highly sensitive to missing values inference (here filled with 0). Depending on the completeness cutoff, variance distribution across technical and biological factors varies substantially. Note that when peptides with missing values are used in analysis (panels center and right), substantial portion of variance is attributed to "resid" (residual), meaning that this variance cannot be associated with any of known factors, indicating that missing value distribution is at least partially random.}
+	\label{fig:batch_figS4_missing_values}
+\end{figure}
 
 \end{document}
