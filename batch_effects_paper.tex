@@ -52,7 +52,6 @@
 \hypersetup{%
   colorlinks=true,% hyperlinks will be coloured
   linkcolor=blue,% hyperlink text will be green
-  pdfborderstyle={0 1 1},% hyperlink border will be red
   urlcolor = blue,
   urlbordercolor	= {0 1 1},
   citecolor = black
@@ -111,12 +110,12 @@
 \maketitle
 
 \begin{abstract}
-	{\small 
+{\small 
 In recent years, technological and methodological advancements have enabled the application of mass spectrometry (MS)-based proteomics to experimental setups consisting of an ever increasing number of samples. While on one hand this has the potential to provide the statistical power the field needs to tackle complex medical applications, it also increases the chance of introducing batch effects. In turn, the error introduced by these technical variables erodes our ability detect true biological signal and produces false positive signal.
 
 Here we present a step-by-step protocol for the assessment, normalization and batch correction of quantitative MS-based proteomics data. Specifically, we discuss approaches to: assess the extent of batch effects in a datasets; select an appropriate normalization and/or batch effect correction methodology; and evaluate the resulting improvements in data quality. In addition to reviewing how methodologies from related fields can be applied to proteomics data, we discuss and propose solutions for MS-specific technical factors, such as ion intensity-drift and sparseness of quantitative feature matrices. We also put forward the application of distance measurements for samples and features as a proteomics compatible, experiment agnostic, way of assessing improvements in data quality. Finally we apply the protocol to three large-scale proteomics datasets encompassing hundreds of samples, to show how it can effectively remove a large portion of technical variability, and increase the variance associated with biological factors.
 
-To facilitate the adoption of the presented concepts, we have also made available proBatch, an R package with one or more functions for each step of batch analysis workflow. The functions have been written to facilitate the building of processig pipelines and the consistent visualization of technical factors at all steps of the analysis.
+To facilitate the adoption of the presented concepts, we have also made available proBatch, an R package with one or more functions for each step of batch analysis workflow. The functions have been written to facilitate the building of processing pipelines and the consistent visualization of technical factors at all steps of the analysis.
 
 We expect that the preprocessing of quantitative peptide/protein matrices with workflows such as the one presented in this manuscript will become a necessary step in the analysis of large proteomics datasets aiming to address complex medical/biological questions.
 }
@@ -199,12 +198,10 @@ Three approaches are particularly useful for initial assessment: 1) plotting the
 		\begin{tabular}{>{\raggedright}p{2cm}m{10.5cm}}
 			\headrow
 			\thead{Step} & \thead{Substeps} \\
-			\makecell{Experimental design \\ 
-			\small{(key points, for details see \cite{Cuklina2020})}
-			}	& \begin{enumerate}
+			Experimental design \footnote{For more details on experimental design see \cite{Cuklina2020})}  & \vspace{3 mm}\begin{enumerate}
 				
 				\item Randomize samples in a balanced manner to prevent confounding of biological factors with batches (technical factors).
-				\item Consider adding replicates (if possible, a) add replication for each technical factor; b) inject a sample mix every 10-15 samples for control)
+				\item Consider adding replicates if possible, for example: a) add replication for each technical factor; b) inject a sample mix every 10-15 samples for control)
 				\item Record all technical factors, both plannable and occurring unexpectedly 
 			\end{enumerate} \\ 
 			Initial assessment	& \begin{enumerate}
@@ -239,6 +236,7 @@ Three approaches are particularly useful for initial assessment: 1) plotting the
 			\end{enumerate} \\ 
 		\end{tabular}
 		
+%\footnotetext[1]{For more details on experimental design see \cite{Cuklina2020})} 
 	\end{tcolorbox}
 \end{table}
 \clearpage
@@ -401,8 +399,8 @@ This is of course not always the case, and batch effects diagnostics should be u
 
 \begin{figure}[hbt]
 	%\center
-	\includegraphics[width=\textwidth]{figures/Fig2_diagnostics.pdf}
-	
+%	\includegraphics[width=\textwidth]{figures/Fig2_diagnostics.pdf}
+	\includegraphics[width=\textwidth]{figures/Fig3_diagnostics.pdf}
 	\caption{\textbf{Diagnostics of batch effects: Aging Mouse study}  \\
 		\footnotesize
 		(A) Principal Components \#1 and \#2 colored by MS batch (left) and replicates (right). The effect of clustering by MS- batch is dominating, but the replicated samples are closer to each other than just random samples; (B) Hierarchical clustering of samples, with leaves colored by Diet, digestion batch, MS batch and Date-time of sample acquisition is dominated by technical factors; (C) Principal Variance Component Analysis of peptides, detected in >50\% of samples demonstrates, that the technical factors, such as MS batch, digestion batch and their combination has a profound effect on the data, while biological factors such as Strain, Sex and Age account for a much smaller fraction of variance; (D) Peptide-level plots for two iRT peptides demonstrate, that batch effect manifests also as MS signal drift that requires correction}
@@ -557,7 +555,7 @@ J.Č. was supported by funding from the European Union Horizon 2020 research and
 \beginsupplement
 
 \subsection{Aging Mouse study: mouse handling}
-Animals were raised at the University of Tennessee Health Science Center (UTHSC) with conditions approved by the UTHSC Animal Care and Use Committee. The facility is Specific Pathogen-Free (SPF) and on a 12-hour day/night cycle at a constant ± 24°C. Animals were raised on a Harlan Teklad 2018 (“Chow Diet” CD; 18.6\% protein, 6.2\% fat, 75.2\% carbohydrates) and then at approximately 3 months of age (but somewhat variable) half of the animals switched to Harlan Teklad 06414 (“High Fat Diet” HFD; 18.4\% protein, 60.3\% fat, 21.3\% carbohydrates) to test the effects of dietary changes. Animals which switched to HFD remained on HFD throughout the experiment. Food and water were available ad libitum. Animals were checked daily for signs of moribundity and if necessary euthanized according to the point system criteria determined by the NIH’s Guidelines for the Care and Use of Laboratory Animals. However, most animals were sacrificed for tissue collection. Mice for tissue collection were injected with the anesthetic avertin and when mice were unconscious, the animals were perfused with ice-cold phosphate-buffered saline (PBS). The livers were then collected, weighed, and frozen in liquid nitrogen.
+Animals were raised at the University of Tennessee Health Science Center (UTHSC) with conditions approved by the UTHSC Animal Care and Use Committee. The facility is Specific Pathogen-Free (SPF) and on a 12-hour day/night cycle at a constant $\pm$ 24$^{\circ}$C. Animals were raised on a Harlan Teklad 2018 (“Chow Diet” CD; 18.6\% protein, 6.2\% fat, 75.2\% carbohydrates) and then at approximately 3 months of age (but somewhat variable) half of the animals switched to Harlan Teklad 06414 (“High Fat Diet” HFD; 18.4\% protein, 60.3\% fat, 21.3\% carbohydrates) to test the effects of dietary changes. Animals which switched to HFD remained on HFD throughout the experiment. Food and water were available ad libitum. Animals were checked daily for signs of moribundity and if necessary euthanized according to the point system criteria determined by the NIH’s Guidelines for the Care and Use of Laboratory Animals. However, most animals were sacrificed for tissue collection. Mice for tissue collection were injected with the anesthetic avertin and when mice were unconscious, the animals were perfused with ice-cold phosphate-buffered saline (PBS). The livers were then collected, weighed, and frozen in liquid nitrogen.
 
 \subsection{Supplementary Figures}
 
