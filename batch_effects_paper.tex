@@ -214,13 +214,14 @@ Three approaches are particularly useful for initial assessment: 1) plotting the
 			Normalization		& \begin{enumerate}
 				
 				\item Choose a normalization procedure, appropriate for biological background and data properties;
+				\item Check whether the sample intensity distributions are now comparable (e.g. with boxplots).
 
 			\end{enumerate} \\ 
 			Diagnostics		& \begin{enumerate}
 				
 				\item Using diagnostic tools, determine, whether batch effects persist in the data. 
 				\item Use quality control already at this step and skip the correction if it is not necessary.
-				\item \textbf{Important:} If the goal is to determine differentially expressed proteins, and the batch effects are discrete or linear, multi-factor ANOVA on normalized data is a sound statistical approach This will adjust for batch effects while simultaneously identifying differentially expressed proteins. This is true even if diagnostic tools indicate the presence of batch effects.
+				\item \textbf{Stopping criterion:} If the goal is to determine differentially expressed proteins, and the batch effects are discrete or linear, multi-factor ANOVA on normalized data is a sound statistical approach. This will adjust for batch effects while simultaneously identifying differentially expressed proteins. This is true even if diagnostic tools indicate the presence of batch effects.
 				
 			\end{enumerate} \\ 
 			Batch effects correction	& 	\begin{enumerate}
@@ -370,7 +371,7 @@ The main goal of the initial assessment is to set a baseline for the magnitude a
 	
 	\caption{\textbf{Initial assessment and normalization of the Aging mouse study} \\
 		\footnotesize
-		(A) Mean Intensity in raw peptide matrix vs sample running order with repeatedly replicated samples shown in color. Vertical dotted lines indicate MS-batch boundaries; (B) Distribution of unadjusted sample intensity correlations - between batches, within batches and in replicated samples; (C) Bias in protein quantification: representative \textit{ACADS} protein, the quantity of which follows the drift of the average sample intensity, preventing allele separation and QTL detection; (D) Boxplots of sample intensities in raw, unnormalized peptide; (E) Boxplots of sample intensities after normalization}
+		(A) Mean Intensity in raw peptide matrix vs sample running order with repeatedly replicated samples shown in color. Vertical dotted lines indicate MS-batch boundaries; (B) Distribution of unadjusted sample intensity correlations - between batches, within batches and in replicated samples; (C) Bias in protein quantification: representative \textit{ACADS} protein, the quantity of which follows the drift of the average sample intensity, preventing allele separation and QTL detection; (D) Boxplots of sample intensities in raw, unnormalized peptide; (E) Boxplots of sample intensities after normalization. All plots represent peptide-level data.}
 	\label{fig:batch_fig2_initAssessment}
 \end{figure}
 
@@ -400,7 +401,7 @@ This is of course not always the case, and batch effects diagnostics should be u
 \begin{figure}[hbt]
 	%\center
 %	\includegraphics[width=\textwidth]{figures/Fig2_diagnostics.pdf}
-	\includegraphics[width=\textwidth]{figures/Fig3_diagnostics.pdf}
+	\includegraphics[width=\textwidth]{figures/Fig3_diagnostics1.pdf}
 	\caption{\textbf{Diagnostics of batch effects: Aging Mouse study}  \\
 		\footnotesize
 		(A) Principal Components \#1 and \#2 colored by MS batch (left) and replicates (right). The effect of clustering by MS- batch is dominating, but the replicated samples are closer to each other than just random samples; (B) Hierarchical clustering of samples, with leaves colored by Diet, digestion batch, MS batch and Date-time of sample acquisition is dominated by technical factors; (C) Principal Variance Component Analysis of peptides, detected in >50\% of samples demonstrates, that the technical factors, such as MS batch, digestion batch and their combination has a profound effect on the data, while biological factors such as Strain, Sex and Age account for a much smaller fraction of variance; (D) Peptide-level plots for two iRT peptides demonstrate, that batch effect manifests also as MS signal drift that requires correction}
@@ -411,13 +412,13 @@ Normalization harmonizes overall sample intensities, however, batch effects can 
 Various methods can be used to assess the extent of remaining bias in the data. Most of them characterize the dataset as a whole, thus working on the proteome level. Methods like Principal Components Analysis (PCA) and Hierarchical Clustering are the best  established. They allow to visualize the factors underlying the similarity of the samples.
 Principal Component Analysis is a method that transforms the data matrix into a linear combination of “components” representing the directions of highest variance in the data. This allows high-dimensional data to be visualized in lower dimensions. Additional coloring of the samples by technical/biological factors, or by highlighting replicates, facilitate the interpretation of what drives sample proximity. For instance, in the Aging mouse study, the following patterns became apparent (see Figure~\ref{fig:batch_fig3_diagnostics}A): first, we see a strong clustering of samples by mass spectrometry batch; second, while replicates tend to be close, they are not necessarily the samples with the smallest distance to each other. An overlaid visualization of other factors, such as digestion batch, diet or acquisition date can be found in Figure~\ref{fig:batch_figS3_pipeline_extra}B. 
  
-Hierarchical clustering, in contrast, allows one to visualize multiple factors at once (Figure~\ref{fig:batch_fig3_diagnostics}B). Overall, the same patterns identified in the PCA plots are confirmed: clustering is driven primarily by MS and digestion batch, while the effect of diet, a dominant biological factor, is not as strong. Similarly, in the PanCancer study (Figure~\ref{fig:batch_figS2_PanCancer}{E and F, top parts}), we see that the digestion batch is the key clustering factor.
+Hierarchical clustering, in contrast, allows one to visualize multiple factors at once (Figure~\ref{fig:batch_fig3_diagnostics}B). Overall, the same patterns identified in the PCA plots are confirmed: clustering is driven primarily by MS and digestion batch, while the effect of diet, a dominant biological factor, is not as strong. Similarly, in the PanCancer study (Figure~\ref{fig:batch_figS2_PanCancer}{C and D, top parts}), we see that the digestion batch is the key clustering factor.
 
 Principal Variance Components Analysis (PVCA) transforms the intuition of visualization brought about by PCA and Hierarchical Clustering into numbers. The weights of each factor in each Principal Component are combined, thus providing a concise summary of variance distribution between biological and technical factors and their combination. In the Aging mouse dataset, we see in Figure~\ref{fig:batch_fig3_diagnostics}C that technical factors such as MS batch, digestion batch, and their combination are leading drivers of variance. Whereas biological factors, such as Diet, Sex, and Age are much less prominent. It should also be noted, that a substantial fraction of variance is “residual”, and cannot be explained by the annotated sample characteristics.
 
 It is important to point out, that most proteome-wide diagnostics rely on data matrices without missing values. Typically for PCA or hierarchical clustering the missing values are imputed (e.g. filled with zeros, small random numbers, or "re-quantified" - filled with summarized MS signal within the projected retention time peak boundaries). However, since missing values are often batch-specific, this might lead to an overestimate of the batch-related clustering and to over-pessimistic assessment of data quality. For more details on the effect of missing values, please refer to \hyperref[box:Box3_missingness]{Box 3 “Missing values”}.
 
-In addition to proteome-wide diagnostics, it is highly advisable to select a few individual features to assess for the presence of feature-level bias. Spike-in peptides and proteins are particularly handy for this type of diagnostics. We illustrate this in the Aging mouse data using iRT peptides, that were spiked at constant quantities in all samples. In Figure~\ref{fig:batch_fig3_diagnostics}D, one can see, that despite the normalization, batch-specific bias still affects the signal. Moreover, this bias is order-related and manifests differently for each of the peptides (for example, in samples 127 – 212 of MS\_batch 3). In the PanCancer study, we instead use peptides from the spiked-in Bovine protein Fetuin B. Also in this case, the spike-in peptides are quantified differently in each batch (Figure \ref{fig:batch_figS2_PanCancer} {C}). In contrast to the Aging mouse study here there is no order-related drift, but rather each batch mean is shifted. In conclusion, feature-level bias can be very different in each dataset and checking several representative peptides can help understand the exact nature of the bias.
+In addition to proteome-wide diagnostics, it is highly advisable to select a few individual features to assess for the presence of feature-level bias. Spike-in peptides and proteins are particularly handy for this type of diagnostics. We illustrate this in the Aging mouse data using iRT peptides, that were spiked at constant quantities in all samples. In Figure~\ref{fig:batch_fig3_diagnostics}D, one can see, that despite the normalization, batch-specific bias still affects the signal. Moreover, this bias is order-related and manifests differently for each of the peptides (for example, in samples 127 – 212 of MS\_batch 3). Also in the PanCancer study, spiked-in Bovine protein Fetuin B quantity is clearly associated with a specific sample preparation batch batch (Figure \ref{fig:batch_figS2_PanCancer} {E}). In contrast to the Aging mouse study here there is no order-related drift, but rather each batch mean is shifted. In conclusion, feature-level bias can be very different in each dataset and checking several representative peptides can help understand the exact nature of the bias.
 
 Together, proteome-level and feature-level diagnostics guide the choice of appropriate batch correction procedure.
 
@@ -439,7 +440,8 @@ Together, proteome-level and feature-level diagnostics guide the choice of appro
 		
 		\begin{minipage}[h]{\linewidth}
 			%\center
-			\includegraphics[width=.9\textwidth]{figures/Fig4_missing_values.pdf}
+			\includegraphics[width=.99\textwidth]{figures/Fig4_missing_values2.pdf}
+			\vspace{-.31cm}
 			\captionof{figure}[l]{\textbf{The problem of missing values in batch effect diagnosis and correction: Aging mouse study} }
 			\label{fig:batch_fig4_missing_values}
 			{\footnotesize  (A) Hierarchical clustering of normalized data; Missing values are shown in black. The missing values are non-randomly associated with the batch; (B) Heatmap of selected sample correlation: stronger correlation of samples within Batch 2 (blue) and Batch 3 (brown) is visible in the data with "re-quants", and replicate correlation is much more prominent in the data without "re-quants";	(C) Distribution of selected sample correlation: same effect, as in (B) showing the distribution of sample correlation.}
@@ -448,18 +450,18 @@ Together, proteome-level and feature-level diagnostics guide the choice of appro
 	\clearpage
 }
 
-The goal of batch effects correction is to alleviate the residual bias after normalization. In most cases, normalization significantly reduces the unwanted variance (see representative peptides in Figure~\ref{fig:batch_figS3_pipeline_extra}C), and, as in the InterLab study, might sometimes be the only required adjustment. However, in many cases the batch effects diagnostic procedures described in the previous section will reveal that individual features are differentially affected by batch effects even after normalization (Figure~\ref{fig:batch_fig3_diagnostics}D and Figure~\ref{fig:batch_figS2_PanCancer}C). Indeed, batch effects correction is typically applied at the feature-level.
+The goal of batch effects correction is to alleviate the residual bias after normalization. In most cases, normalization significantly reduces the unwanted variance (see representative peptides in Figure~\ref{fig:batch_figS3_pipeline_extra}C), and, as in the InterLab study, might sometimes be the only required adjustment. However, in many cases the batch effects diagnostic procedures described in the previous section will reveal that individual features are differentially affected by batch effects even after normalization (Figure~\ref{fig:batch_fig3_diagnostics}D and Figure~\ref{fig:batch_figS2_PanCancer}C and E). Indeed, batch effects correction is typically applied at the feature-level.
 
 Feature-level bias in proteomics can have different  roots. In the Aging mouse data, the peptides manifest an order-specific, continuous bias, while the PanCancer data exhibits discrete shifts. The latter can be corrected with methods established by the genomics community, whereas the former is typical of large MS-based proteomic experiments and will therefore be discussed in more details in the following paragraphs.
 
 In MS-based proteomics, samples are analyzed sequentially, typically using an on-line chromatographic system directly coupled to a mass spectrometer. Various components of this system are susceptible to degradation of performances over time (e.g. changes in the properties of the chromatographic material, emitter degradation, contamination of MS lenses, mass calibration drift). Various factors, such as sample quality and composition, can contribute to the speed of this degradation. However, even under best conditions, one can expect to see noticeable degradation after a few hundred runs. Therefore, continuous batch effects associated with signal drift are characteristic of MS-based proteomics. They are also increasing in importance as they are particularly relevant in large scale studies. For instance, the Aging mouse study was comprised of almost 400 samples and therefore had to be split into 7 MS measurement batches, each with a unique signal drifting pattern to it.
 
-To address this complex bias, we have developed a two-step batch correction procedure shown in Figure~\ref{fig:batch_fig5_batchCorrection}. In the first step, MS signal drift is corrected based on non-linear curve fitting. As a curve-fitting algorithm, we have chosen LOESS, as it combines computational simplicity with relative flexibility of the fit characteristics. The procedure runs as follows: for each peptide and each batch, a unique curve is fit (Figure~\ref{fig:batch_fig5_batchCorrection}A), and then subtracted from the normalized intensity value in each sample, leading to measurements, whose median is different in each batch (Figure~\ref{fig:batch_fig5_batchCorrection}B). Note, that LOESS has a parameter "span" : smaller span fits minute details, while when the span is too big, some of the trends get missed, meaning the each time the span has to be adjusted to each dataset individually (see Figure~\ref{fig:batch_figS3_pipeline_extra}). Alternatively, other algorithms, such as SVM and Random Forest, can be used to correct for the MS signal drift \cite{Luan2018, Shen2016}.   After that, a discrete batch effects correction procedure can be applied (e.g. median centering, ComBat, ...). In the Aging mouse (Figure~\ref{fig:batch_fig5_batchCorrection}C) and PanCancer (Figure~\ref{fig:batch_figS2_PanCancer}C-F) studies we opted to use median centering at this stage. It should be noted that while this approach can cope with missing values, having a significant percentage of missingness will compromise its effectiveness. For more details on missing value problem see \hyperref[box:Box3_missingness]{Box 3 "Missing values"}.
+To address this complex bias, we have developed a two-step batch correction procedure shown in Figure~\ref{fig:batch_fig5_batchCorrection}. In the first step, MS signal drift is corrected based on non-linear curve fitting. As a curve-fitting algorithm, we have chosen LOESS, as it combines computational simplicity with relative flexibility of the fit characteristics. The procedure runs as follows: for each peptide and each batch, a unique curve is fit (Figure~\ref{fig:batch_fig5_batchCorrection}A), and then subtracted from the normalized intensity value in each sample, leading to measurements, whose median is different in each batch (Figure~\ref{fig:batch_fig5_batchCorrection}B). Note, that LOESS has a parameter "span": smaller span fits minute details, while when the span is too big, some of the trends get missed, meaning the each time the span has to be adjusted to each dataset individually (see Figure~\ref{fig:batch_figS3_pipeline_extra}). Alternatively, other algorithms, such as SVM and Random Forest, can be used to correct for the MS signal drift \cite{Luan2018, Shen2016}.   After that, a discrete batch effects correction procedure can be applied (e.g. median centering, ComBat, ...). In the Aging mouse (Figure~\ref{fig:batch_fig5_batchCorrection}C) and PanCancer (Figure~\ref{fig:batch_figS2_PanCancer}C-F) studies we opted to use median centering at this stage. It should be noted that while this approach can cope with missing values, having a significant percentage of missingness will compromise its effectiveness. For more details on missing value problem see \hyperref[box:Box3_missingness]{Box 3 "Missing values"}.
 
 \subsection{Batch effects correction}
 \begin{figure}[hbt]
 	%\center
-	\includegraphics[width=\textwidth]{figures/Fig5_batch_correction.pdf}
+	\includegraphics[width=\textwidth]{figures/Fig5_batch_correction1.pdf}
 	
 	\caption{\textbf{Two-step correction of batch effects}  \\
 		\footnotesize
@@ -475,7 +477,7 @@ In conclusion, batch effect correction removes variance from known, annotated ba
 \subsection{Quality Control}
 \begin{figure}[hbt]
 	%\center
-	\includegraphics[width=\textwidth]{figures/Fig5_quality_control2.pdf}
+	\includegraphics[width=\textwidth]{figures/Fig6_quality_control2.pdf}
 	
 	\caption{\textbf{Quality control of batch effects correction}  \\
 		\footnotesize
@@ -486,7 +488,7 @@ In conclusion, batch effect correction removes variance from known, annotated ba
 
 The main goal of the quality control step is to determine, whether the data quality has improved. 
 
-Examples of negative controls are the plots discussed in the diagnostics section like individual peptides plots, PCA, hierarchical clustering or PVCA. In most cases, these show that samples are no longer affected by batch-specific patterns (e.g. PanCancer study corrected Bovine peptides in Figure~\ref{fig:batch_figS2_PanCancer}E and F and hierarchical clustering in Figure~\ref{fig:batch_figS2_PanCancer}C and D).
+Examples of negative controls are the plots discussed in the diagnostics section like individual peptides plots, PCA, hierarchical clustering or PVCA. In most cases, these show that samples are no longer affected by batch-specific patterns (e.g. PanCancer study hierarchical clustering in Figure~\ref{fig:batch_figS2_PanCancer}C and D and corrected Bovine Fetuin B protein in Figure~\ref{fig:batch_figS2_PanCancer}E and F and ).
 
 Depending on the experimental setup, one can sometimes judge the data improvement through the presence of better biological signal. In the Aging mouse study, this can be achieved via known protein Quantitative Trait Loci (pQTL), particularly \textit{cis}-QTLs (i.e. alleles of specific genes  affecting protein expression from that locus). As seen in Figure~\ref{fig:batch_fig6_QualityControl}A, certain proteins become clearly easier to separate and less biased than before the bias adjustment (compare to Figure~\ref{fig:batch_fig2_initAssessment}C). As a result, there is a clear increase in pQTL detection sensitivity: 255 pQTLs passed the significance threshold in the raw data matrix, and extra 133 pQTLs have been detected after batch effects adjustment - 100 after normalization and 33 additional pQTLs after batch effects correction. In this case, normalization seems to alleviate the most of the bias, as was already demonstrated in \ref{fig:batch_figS3_pipeline_extra}C. This effect is quite common, and is the reason why the batch effects correction step was not performed in the InterLab study. Skipping batch effects correction is particularly common, when the next analysis step is ANOVA, or it is not clear, which technical factor should be corrected for (e.g. diagnostic plots don't show a clear clustering pattern and the weights of technical factors on PVCA are low).  However, when biological groups are not confounded with technical factors, batch correction usually improves signal and reduces noise.
 
@@ -535,7 +537,7 @@ In conclusion, mass spectrometry based proteomics has come a long way, and is st
 J.~Č and P.~P. designed the analysis workflow and wrote the manuscript, E.~W. introduced multiple components in the workflow and made major contributions to the manuscript outline and text. J.~Č., C. ~L., E.~W. and V.~S. performed data analysis. J.~Č., C.~L. and P.~P. implemented back-end R functionality, E.~W. helped with the code testing. E.~W., T.~S. and B.~C. provided proteomic data and contributed to workflow conceptualization. M.~R.-M. provided critical input on the project and assisted in analysis pipeline design. P.~P. and R.~A. supervised the study.
 
 \section*{Acknowledgements}
-We would like to thank Qing Zhong and Rebecca Poulos for early feedback on the pipeline, and Hua Tang for valuable comments on the manuscript. 
+We would like to thank Qing Zhong and Rebecca Poulos for early feedback on the workflow, and Hua Tang for valuable comments on the manuscript. 
 
 \section*{Conflict of interest}
 Authors declare no conflict of interests
@@ -548,7 +550,7 @@ J.Č. was supported by funding from the European Union Horizon 2020 research and
 % Submissions are not required to reflect the precise reference formatting of the journal (use of italics, bold etc.), however it is important that all key elements of each reference are included.
 \bibliography{batch_references}
 
-\graphicalabstract{example-image}{\textcolor{red}{To be discussed, whether to go for it.}}
+%\graphicalabstract{example-image}{\textcolor{red}{To be discussed, whether to go for it.}}
 
 \newpage
 \section{Supplementary Material}
@@ -563,17 +565,17 @@ Animals were raised at the University of Tennessee Health Science Center (UTHSC)
 	\centering
 	\includegraphics[width=\textwidth,height=.9\textheight,keepaspectratio]{figures/Supp_InterLab.pdf}
 	\caption{\textbf{Batch effects in the InterLab study}\\
-		 \footnotesize  (A) Boxplots of raw sample intensities colored by MS spectra acquisition sites; (B) Sample correlation heatmap, top row and left column colored by MS spectra acquisition sites, used as a quality control; (C) Comparison of two spike-in peptide quantification in raw and normalized data; (D) Boxplots of median-normalized sample intensities; (E) Quality control by comparing coefficient of variance (CV) for proteins, binned by log10 abundance.}
+		 \footnotesize  (A) Boxplots of protein-level raw sample intensities colored by MS spectra acquisition sites (normalization on fragment-level); (B) Sample correlation heatmap, top row and left column colored by MS spectra acquisition sites, used as a quality control (protein-level data); (C) Comparison of two spike-in peptide quantification in raw and normalized data; (D) Boxplots of median-normalized sample intensities; (E) Quality control by comparing coefficient of variance (CV) for proteins, binned by log10 abundance.}
 	\label{fig:batch_figS1_InterLab}
 \end{figure}
 
 \begin{figure}
 	%\center
-	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer}
+	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer.png}
 	
 	\caption{\textbf{Batch effects in the PanCancer study} \\
 		\footnotesize (A) Boxplots of raw sample intensities colored by digestion batch; (B) Boxplots of normalized sample intensities colored by digestion batch; 
-		(C) Intensity of spike-in Fetuin in raw data; (D) Intensity of spike-in Fetuin in batch corrected data; (E) Hierarchical clustering and heatmap of raw protein-level data; (F) Hierarchical clustering and heatmap of batch corrected protein-level data; (G) Hierarchical clustering of normalized data with Manhattan distance, with replicated samples colored; (H) Hierarchical clustering of batch corrected data with Manhattan distance, with replicated samples colored.}
+		(C) Hierarchical clustering and heatmap of raw protein-level data; (D) Hierarchical clustering and heatmap of batch corrected protein-level data; (E) Intensity of spike-in Fetuin in raw data; (F) Intensity of spike-in Fetuin in batch corrected data; (G) Hierarchical clustering of normalized data with Manhattan distance, with replicated samples colored; (H) Hierarchical clustering of batch corrected data with Manhattan distance, with replicated samples colored. All plots represent protein level data.}
 	\label{fig:batch_figS2_PanCancer}
 \end{figure}
 
