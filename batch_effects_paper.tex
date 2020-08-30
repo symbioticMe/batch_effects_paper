@@ -417,7 +417,7 @@ Principal Variance Components Analysis (PVCA) transforms the intuition of visual
 
 It is important to point out, that most proteome-wide diagnostics rely on data matrices without missing values. Typically for PCA or hierarchical clustering the missing values are imputed (e.g. filled with zeros, small random numbers, or "re-quantified" - filled with summarized MS signal within the projected retention time peak boundaries). However, since missing values are often batch-specific, this might lead to an overestimate of the batch-related clustering and to over-pessimistic assessment of data quality. For more details on the effect of missing values, please refer to \hyperref[box:Box3_missingness]{Box 3 “Missing values”}.
 
-In addition to proteome-wide diagnostics, it is highly advisable to select a few individual features to assess for the presence of feature-level bias. Spike-in peptides and proteins are particularly handy for this type of diagnostics. We illustrate this in the Aging mouse data using iRT peptides, that were spiked at constant quantities in all samples. In Figure~\ref{fig:batch_fig3_diagnostics}D, one can see, that despite the normalization, batch-specific bias still affects the signal. Moreover, this bias is order-related and manifests differently for each of the peptides (for example, in samples 127 – 212 of MS\_batch 3). In the PanCancer study, we instead use peptides from the spiked-in Bovine protein Fetuin B. Also in this case, the spike-in peptides are quantified differently in each batch (Figure \ref{fig:batch_figS2_PanCancer} {C}). In contrast to the Aging mouse study here there is no order-related drift, but rather each batch mean is shifted. In conclusion, feature-level bias can be very different in each dataset and checking several representative peptides can help understand the exact nature of the bias.
+In addition to proteome-wide diagnostics, it is highly advisable to select a few individual features to assess for the presence of feature-level bias. Spike-in peptides and proteins are particularly handy for this type of diagnostics. We illustrate this in the Aging mouse data using iRT peptides, that were spiked at constant quantities in all samples. In Figure~\ref{fig:batch_fig3_diagnostics}D, one can see, that despite the normalization, batch-specific bias still affects the signal. Moreover, this bias is order-related and manifests differently for each of the peptides (for example, in samples 127 – 212 of MS\_batch 3). In the PanCancer study, we see that protein quantities are biased by batch effect on the example of the spiked-in Bovine protein Fetuin B (Figure \ref{fig:batch_figS2_PanCancer} {C and E}). In contrast to the Aging mouse study here there is no order-related drift, but rather each batch mean is shifted. In conclusion, feature-level bias can be very different in each dataset and checking several representative peptides can help understand the exact nature of the bias.
 
 Together, proteome-level and feature-level diagnostics guide the choice of appropriate batch correction procedure.
 
@@ -563,17 +563,17 @@ Animals were raised at the University of Tennessee Health Science Center (UTHSC)
 	\centering
 	\includegraphics[width=\textwidth,height=.9\textheight,keepaspectratio]{figures/Supp_InterLab.pdf}
 	\caption{\textbf{Batch effects in the InterLab study}\\
-		 \footnotesize  (A) Boxplots of raw sample intensities colored by MS spectra acquisition sites; (B) Sample correlation heatmap, top row and left column colored by MS spectra acquisition sites, used as a quality control; (C) Comparison of two spike-in peptide quantification in raw and normalized data; (D) Boxplots of median-normalized sample intensities; (E) Quality control by comparing coefficient of variance (CV) for proteins, binned by log10 abundance.}
+		 \footnotesize  (A) Boxplots of raw protein intensity distribution in each sample colored by MS spectra acquisition sites; (B) Sample correlation heatmap for protein intensities, top row and left column colored by MS spectra acquisition sites, used as a quality control; (C) Comparison of two spike-in peptide quantification in raw and normalized data; (D) Boxplots of median-normalized sample intensities; (E) Quality control by comparing coefficient of variance (CV) for proteins, binned by log10 abundance.}
 	\label{fig:batch_figS1_InterLab}
 \end{figure}
 
 \begin{figure}
 	%\center
-	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer}
+	\includegraphics[width=\textwidth]{figures/Supp_Fig2_PanCancer.png}
 	
 	\caption{\textbf{Batch effects in the PanCancer study} \\
 		\footnotesize (A) Boxplots of raw sample intensities colored by digestion batch; (B) Boxplots of normalized sample intensities colored by digestion batch; 
-		(C) Intensity of spike-in Fetuin in raw data; (D) Intensity of spike-in Fetuin in batch corrected data; (E) Hierarchical clustering and heatmap of raw protein-level data; (F) Hierarchical clustering and heatmap of batch corrected protein-level data; (G) Hierarchical clustering of normalized data with Manhattan distance, with replicated samples colored; (H) Hierarchical clustering of batch corrected data with Manhattan distance, with replicated samples colored.}
+		 (C) Hierarchical clustering and heatmap of raw protein-level data; (D) Hierarchical clustering and heatmap of batch corrected protein-level data; (E) Intensity of spike-in Fetuin in raw data; (F) Intensity of spike-in Fetuin in batch corrected data;(G) Hierarchical clustering of normalized data with Manhattan distance, with replicated samples colored; (H) Hierarchical clustering of batch corrected data with Manhattan distance, with replicated samples colored. All plots represent protein-level data.}
 	\label{fig:batch_figS2_PanCancer}
 \end{figure}
 
